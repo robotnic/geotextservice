@@ -1,0 +1,4 @@
+<gts query="message/delete">
+	<delete id="123" status="ok"/>
+	<delete id="124" status="not authorized" statusnumber="1"/>
+</gts>

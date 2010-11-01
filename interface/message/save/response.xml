@@ -1,0 +1,8 @@
+<gts query="message/save">
+<content  lat="48.2" lon="15.6" id="234" user="franz" timestamp="2010-10-03 20:35:37">
+Hier kommt das grosse Blabla
+</content>
+<content  lat="48.3" lon="-23.6" id="145" user="franz"  timestamp="2010-10-03 20:35:37">
+Diese Nachricht hat eine id, das bedeutet, dass der Nachricht geaendert wird
+</content>
+</gts>

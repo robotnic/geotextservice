@@ -1,0 +1,8 @@
+<gts key="EF988339EED5598DE8888776222EEAAA">
+<content  lat="48.2" lon="15.6" >
+Hier kommt das grosse Blabla
+</content>
+<content  lat="48.3" lon="-23.6" id="145">
+Diese Nachricht hat eine id, das bedeutet, dass der Nachricht geaendert wird
+</content>
+</gts>

@@ -1,0 +1,25 @@
+<element name="gts" xmlns="http://relaxng.org/ns/structure/1.0">
+  <attribute name="query">
+	<text/>
+  </attribute>
+  <zeroOrMore>
+	<element name="content">
+		<attribute name="lat">
+			<text/>
+		</attribute>
+		<attribute name="lon">
+			<text/>
+		</attribute>
+		<attribute name="id">
+			<text/>
+		</attribute>
+		<attribute name="user">
+			<text/>
+		</attribute>
+		<attribute name="timestamp">
+			<text/>
+		</attribute>
+		<text/>
+	</element>
+  </zeroOrMore>
+</element>

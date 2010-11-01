@@ -1,0 +1,4 @@
+<gts query="user/delete">
+	<delete user="franzi"/>
+	<delete user="seppi"/>
+</gts>
