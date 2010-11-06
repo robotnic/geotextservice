@@ -1,0 +1,37 @@
+<grammar xmlns= 'http://relaxng.org/ns/structure/1.0' datatypeLibrary='http://www.w3.org/2001/XMLSchema-datatypes'>
+	<start>
+		<element name='gts'>
+			<attribute name='query'>
+				<data type='string' />
+			</attribute>
+			<zeroOrMore>
+				<element name='content'>
+					<attribute name='lat'>
+						<data type='double'/>
+					</attribute>
+					<attribute name='lon'>
+						<data type='double'/>
+					</attribute>
+					<attribute name='id'>
+						<data type='string' />
+					</attribute>
+					<attribute name='user'>
+						<data type='string'>
+							<param name='maxLength'>
+								50
+							</param>
+						</data>
+					</attribute>
+					<attribute name='timestamp'>
+						<data type='string' />
+					</attribute>
+					<data type='string'>
+						<param name='maxLength'>
+							127
+						</param>
+					</data>
+				</element>
+			</zeroOrMore>
+		</element>
+	</start>
+</grammar>
