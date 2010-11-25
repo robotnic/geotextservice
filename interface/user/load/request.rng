@@ -1,0 +1,13 @@
+<grammar xmlns= 'http://relaxng.org/ns/structure/1.0' datatypeLibrary='http://www.w3.org/2001/XMLSchema-datatypes'>
+<start>
+<element xmlns= 'http://relaxng.org/ns/structure/1.0' name='gts'>
+	<attribute name='key'>
+		<data type='string'>
+			<param name='maxLength'>					
+				127
+			</param>
+		</data>
+	</attribute>
+</element>
+</start>
+</grammar>
