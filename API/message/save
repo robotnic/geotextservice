@@ -19,11 +19,11 @@ class MessageSave
 			begin
         		doc.validate_relaxng(relaxng_schema)
         		
-				rescue Exception => e
-	        		puts e.message
-				
-				else
+#			rescue Exception => e
+#	        		puts e.message
+#			else
 				    puts "ok"
+
 			end
 
 	#Errorhandling-end
