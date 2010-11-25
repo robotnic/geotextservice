@@ -1,0 +1,3 @@
+<FilesMatch "^(save|load|vote|delete)">
+    ForceType fcgid-script
+</FilesMatch>
