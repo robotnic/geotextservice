@@ -1,4 +1,4 @@
-KAPUTTE REQUESTS MSG SAVE:
+ÔªøKAPUTTE REQUESTS MSG SAVE:
 
 01 G encoding fehler
 02 G lat und/oder lon kein integer
@@ -7,13 +7,13 @@ KAPUTTE REQUESTS MSG SAVE:
 05 K kein key dabei
 06 K sonderzeichen im text
 07 U id ist kein integer
-08 U groﬂ/kleinschreibung der attribute
+08 U gro√ü/kleinschreibung der attribute
 09 U in lat/lon: komma statt dezimalpunkt
 10 N tag nicht geschlossen
 11 N attribut nicht abgeschlossen
 12 N kein gts tag
 13 N starttag (gts) / content nicht geschlossen
-14 K lat / long auﬂerhalb des Bereiches
+14 K lat / long au√üerhalb des Bereiches
 
 
 FEHLERFREIE REQUEST:

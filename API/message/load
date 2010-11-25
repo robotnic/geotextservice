@@ -1,4 +1,4 @@
-#! /usr/bin/ruby
+! /usr/bin/ruby
 
 require 'rubygems'
 require 'rack'
@@ -25,8 +25,8 @@ st.execute();
 xml = '<gts query="message/load[#{inputstring}]">';
 
 while row = st.fetch do
-xml += '<content lat="#{row[1]}" lon="#{row[2]}" user="#{row[5]}" id="#{row[0]}" timestamp="#{row[4]}">'
-     
+xml += '<content lat="#{row[1]}" lon="#{row[2]}" user="#{row[5]}" id="#{row[0]}" timestamp="#{row[4]}">';
+xml +=      
      puts row[0],":",row[1],"<br>"
 
 end
