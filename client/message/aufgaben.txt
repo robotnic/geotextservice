@@ -1,7 +1,7 @@
 ﻿KAPUTTE REQUESTS MSG SAVE:
 
 01 G encoding fehler
-02 G lat und/oder lon kein integer
+02 G lat und/oder lon ist text
 03 G keine attribute/nur ein attribut
 04 K kein content dabei / leeres gts
 05 K kein key dabei
