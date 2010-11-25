@@ -1,0 +1,29 @@
+﻿KAPUTTE REQUESTS MSG SAVE:
+
+01 G encoding fehler
+02 G lat und/oder lon kein integer
+03 G keine attribute/nur ein attribut
+04 K kein content dabei / leeres gts
+05 K kein key dabei
+06 K sonderzeichen im text
+07 U id ist kein integer
+08 U groß/kleinschreibung der attribute
+09 U in lat/lon: komma statt dezimalpunkt
+10 N tag nicht geschlossen
+11 N attribut nicht abgeschlossen
+12 N kein gts tag
+13 N starttag (gts) / content nicht geschlossen
+14 K lat / long außerhalb des Bereiches
+
+
+FEHLERFREIE REQUEST:
+01 G Update
+02 U New
+
+
+ORDNERSTRUKTUR:
+/client/
+	- message/
+		- save/
+			* save.cgi
+			* xml files
