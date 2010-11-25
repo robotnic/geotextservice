@@ -11,6 +11,23 @@ class MessageSave
     req= Rack::Request.new(env)
     doc = XML::Document.string(req.body.read);
     
+    #Errorhandling (Check with RNG file)
+    	relaxng_document = XML::Document.file('../../interface/message/save/request.rng')
+		relaxng_schema = XML::RelaxNG.document(relaxng_document)
+		#instance = XML::Document.file(doc)
+
+			begin
+        		doc.validate_relaxng(relaxng_schema)
+        		
+				rescue Exception => e
+	        		puts e.message
+				
+				else
+				    puts "ok"
+			end
+
+	#Errorhandling-end
+    
     c=req.query_string()
 
     if(c=="die")
