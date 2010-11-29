@@ -22,13 +22,13 @@ XML::Error.set_handler do |error|
 end
 
 # parse schema as xml document
-relaxng_document = XML::Document.file('../../../interface/message/save/request.rng')
+relaxng_document = XML::Document.file('../../../interface/message/save/response.rng')
 
 # prepare schema for validation
 relaxng_schema = XML::RelaxNG.document(relaxng_document)
 #endnew
 begin
-instance = XML::Document.file('error14.xml')
+instance = XML::Document.file('responseerror1.xml')
 rescue #keine ausgabe
 
 end
