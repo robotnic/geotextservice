@@ -1,0 +1,28 @@
+<grammar xmlns= 'http://relaxng.org/ns/structure/1.0' datatypeLibrary='http://www.w3.org/2001/XMLSchema-datatypes'>
+	<start>
+		<choice>
+			<element name='gts'>
+				<element name='vote'>
+					<attribute name='id'>
+						<data type='integer'/>
+					</attribute>
+					<data type='string'>
+						<param 'maxLength'>
+							1
+						</param>
+					</data>
+				</element>
+			</element>
+			<element name='error'>
+				<attribute name='no'>
+					<data type='integer' />
+				</attribute>
+				<data type='string'>
+					<param name='maxLength'>
+						127
+					</param>
+				</data>
+			</element>
+		</choice>
+	</start>
+</grammar>
