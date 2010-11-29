@@ -12,6 +12,14 @@ class UserRegister
     doc = XML::Document.string(req.body.read)
 
 #Errorhandling
+    begin
+        relaxng_doc = XML::Document.file('../../interface/user/register/request.rng')
+    rescue
+        xml = "<error no='5'>Couldn't open relaxng file. Check permissions or path</error>"
+        [200,{"Content-Type" => "text/xml"},[xml]]        
+    end
+
+    relaxng_sch = XML::RelaxNG.document(relaxng_doc)
 
     username = doc.find("/gts/username")
     password = doc.find("/gts/password")
