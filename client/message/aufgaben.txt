@@ -15,10 +15,13 @@
 13 N starttag (gts) / content nicht geschlossen
 14 K lat / long außerhalb des Bereiches
 
+format: errorxx.xml
 
 FEHLERFREIE REQUEST:
 01 G Update
 02 U New
+
+format: correctxx.xml
 
 
 ORDNERSTRUKTUR:
