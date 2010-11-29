@@ -3,7 +3,7 @@
 		<choice>
 			<element name='gts'>
 				<attribute name='query'>
-					<text/>
+					<data type='string' />
 				</attribute>
 
 				<zeroOrMore>
