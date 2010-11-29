@@ -5,22 +5,15 @@
 				<attribute name='query'>
 					<data type='string' />
 				</attribute>
-
-				<zeroOrMore>
-					<element name='delete'>
-						<attribute name='id'>
-							<data type='integer'/>
-						</attribute>
-						<attribute name='status'>
-							<data type='string' />
-						</attribute>
-						<zeroOrMore>
-							<attribute name='statusnumber'>
-								<data type='integer'/>
-							</attribute>
-						</zeroOrMore>
-					</element>
-				</zeroOrMore>
+				<element name='success'>
+					<attribute name='key'>
+						<data type='string'>
+							<param name='maxLength'>
+								32
+							</param>
+						</data>						
+					</attribute>
+				</element>				
 			</element>
 			<element name='error'>
 				<attribute name='no'>
@@ -35,3 +28,4 @@
 		</choice>
 	</start>
 </grammar>
+
