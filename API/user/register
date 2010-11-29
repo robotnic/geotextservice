@@ -30,7 +30,10 @@ class UserRegister
         xml = "<error no='5'>Couldn't open relaxng file. Check permissions or path</error>"
         return [200,{"Content-Type" => "text/xml"},[xml]]
     end
-
+c=req.query_string()
+if(c=="die")
+abort
+end
 
     userxml = doc.find("/gts/username")
     passxml = doc.find("/gts/password")
