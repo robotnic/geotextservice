@@ -9,21 +9,25 @@ class MessageSave
     def call(env)
 
     req= Rack::Request.new(env)
+    
     doc = XML::Document.string(req.body.read);
     
     #Errorhandling (Check with RNG file)
-    	relaxng_document = XML::Document.file('../../interface/message/save/request.rng')
+    relaxng_document = XML::Document.file('../../interface/message/save/request.rng')
 		relaxng_schema = XML::RelaxNG.document(relaxng_document)
 		#instance = XML::Document.file(doc)
 
 			begin
         		doc.validate_relaxng(relaxng_schema)
         		
-#			rescue Exception => e
-#	        		puts e.message
-#			else
+				rescue Exception => e
+				puts e.message				
+				
+				xml = "<error no='1'>Es ist ein XML Fehler aufgetreten: #{e.message}</error>"
+				[200, {"Content-Type" => "text/xml"}, [xml]]
+				
+				else
 				    puts "ok"
-
 			end
 
 	#Errorhandling-end

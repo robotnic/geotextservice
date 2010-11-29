@@ -1,0 +1,26 @@
+#! /usr/bin/ruby
+
+require 'rubygems'
+require 'connect.rb'
+require 'xml'
+require 'rack'
+
+class UserLogin
+    def call(env)
+
+    req= Rack::Request.new(env)
+    
+    doc = XML::Document.string(req.body.read);
+    
+    doc.find("/gts/username") {|node| 
+    username = node.content;
+    };
+    
+    doc.find("/gts/password") {|node| 
+    password = node.content;
+    };
+
+puts username;
+puts password;
+
+end
