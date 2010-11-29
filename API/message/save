@@ -5,6 +5,8 @@ require 'connect.rb'
 require 'xml'
 require 'rack'
 
+$dbh=dbconnect   #hier eine global variable mit $
+
 def errorHandler(no, message)
     xml="<error no='"+no.to_s+"'>"+message+"</error>"
     return xml
@@ -46,17 +48,17 @@ class MessageSave
   
 
     doc.find("/gts/content").each {|node| 
-      lon=node.attributes.get_attribute("lon").value; 
-      lat=node.attributes.get_attribute("lat").value;
-
+      lon=node.attributes.get_attribute("lon"); 
+      lat=node.attributes.get_attribute("lat");
+      
       begin 
-        id = node.attributes.get_attribute("id").value;
+        id = node.attributes.get_attribute("id");
       rescue
         id = nil;
       end                
     
       begin                                        
-        content = node.content;
+        content = node.first.content;
       rescue
         return
       end
@@ -66,9 +68,8 @@ class MessageSave
   end
   
   
-  def writetodb(lat,lon,message,id=nil)
+  def writetodb(lat.to_f,lon.to_f,message,id=nil)
    
-    $dbh=dbconnect   #hier eine global variable mit $
 
       if id.nil?
         sql = "insert into geopoints(lat,lon,message) values (?,?,?);"
@@ -81,7 +82,8 @@ class MessageSave
         sql = "update geopoints set lat=?,lon=?,message=? where id =?;"
         
         st=$dbh.prepare(sql);
-    
+        
+                
         st.execute(lat,lon,message,id);
       end
   end
