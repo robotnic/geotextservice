@@ -1,36 +1,48 @@
 #! /usr/bin/ruby
 
 require 'rubygems'
-require "connect.rb"
-require "xml"
+require 'connect.rb'
+require 'xml'
 require 'rack'
+
+def errorHandler(no, message)
+    xml="<error no='"+no.to_s+"'>"+message+"</error>"
+    return xml
+end
+
+XML::Error.set_handler do |error|
+    xml = errorHandler(234, error.to_s)
+    [200, {"Content-Type" => "text/xml"}, [xml]]
+    return
+end
 
 class MessageSave
     def call(env)
 
     req= Rack::Request.new(env)
     
-    doc = XML::Document.string(req.body.read);
     
     #Errorhandling (Check with RNG file)
+
+
+
+
+begin  
+    doc = XML::Document.string(req.body.read);
     relaxng_document = XML::Document.file('../../interface/message/save/request.rng')
-		relaxng_schema = XML::RelaxNG.document(relaxng_document)
-		#instance = XML::Document.file(doc)
+    relaxng_schema = XML::RelaxNG.document(relaxng_document)
+    rescue
 
-			begin
-        		doc.validate_relaxng(relaxng_schema)
-        		
-				rescue Exception => e
-				puts e.message				
-				
-				xml = "<error no='1'>Es ist ein XML Fehler aufgetreten: #{e.message}</error>"
-				[200, {"Content-Type" => "text/xml"}, [xml]]
-				
-				else
-				    puts "ok"
-			end
+else
 
-	#Errorhandling-end
+    begin
+    doc.validate_relaxng(relaxng_schema)
+    rescue
+    //nix
+    end
+end
+  
+#Errorhandling-end
     
     c=req.query_string()
 
@@ -42,25 +54,7 @@ class MessageSave
     doc.find("/gts/content").each {|node| 
     lon=node.attributes.get_attribute("lon").value; 
     lat=node.attributes.get_attribute("lat").value;
-                                           
-    begin 
-        id = node.attributes.get_attribute("id").value;
-    rescue
-        id = nil;
-    end                
     
-    begin                                        
-        content = node.content;
-    rescue
-        return
-    end
-    
-    writetodb(lat, lon, content,id);
-    
-    };
-
-
-    end
     def writetodb(lat,lon,message,id=nil)
  
     $dbh=dbconnect   #hier eine global variable mit $
@@ -80,8 +74,25 @@ class MessageSave
         st.execute(lat,lon,message,id);
     end
 
-       
+                                           
+    begin 
+        id = node.attributes.get_attribute("id").value;
+    rescue
+        id = nil;
+    end                
+    
+    begin                                        
+        content = node.content;
+    rescue
+        return
     end
+    
+    writetodb(lat, lon, content,id);
+    
+    };
+
+    end
+
 end
 
 Rack::Handler::FastCGI.run MessageSave.new

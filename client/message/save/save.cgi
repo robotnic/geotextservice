@@ -67,7 +67,6 @@ else
 			puts xml , "<br/>"
 
 			response = Net::HTTP.start(url.host, url.port) {|http| http.request(request)}
-
 			response = response.body
 
 
