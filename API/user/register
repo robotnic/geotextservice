@@ -18,23 +18,19 @@ class UserRegister
     begin
         relaxng_doc = XML::Document.file('../../interface/user/register/request.rng')
         relaxng_sch = XML::RelaxNG.document(relaxng_doc)
+        #validate relax ng    
+            begin 
+                doc.validate_relaxng(relaxng_sch)
+            rescue Exception => e
+                 xml = "<error no='7'>XML ERROR: #{e.message}</error>"
+                return [200,{"Content-Type" => "text/xml"},[xml]]                
+            end
+
     rescue
         xml = "<error no='5'>Couldn't open relaxng file. Check permissions or path</error>"
-        [200,{"Content-Type" => "text/xml"},[xml]]
+        return [200,{"Content-Type" => "text/xml"},[xml]]
     end
-#validate relax ng    
-    begin 
-        doc.validate_relaxng(relaxng_sch)
-    rescue Exception => e
-         xml = "<error no='7'>XML ERROR: #{e.message}</error>"
-        [200,{"Content-Type" => "text/xml"},[xml]]
-    end
-=begin
-c=req.query_string()
-if(c=="die")
-abort
-end
-=end
+
 
     userxml = doc.find("/gts/username")
     passxml = doc.find("/gts/password")
@@ -44,10 +40,10 @@ end
 
         if (create(username,password))
             xml = "<gts query='user/register'><success key='EEE33343AAEF'/></gts>"
-            [200,{"Content-Type" => "text/xml"},[xml]]  
+           return [200,{"Content-Type" => "text/xml"},[xml]]  
         else
             xml = "<error no='6'>you fail</error>"
-            [200,{"Content-Type" => "text/xml"},[xml]]  
+           return [200,{"Content-Type" => "text/xml"},[xml]]  
         end
     end
     def create(username,password)
