@@ -15,9 +15,9 @@ cgi = CGI.new
 
 #type = cgi['type']
 
-url = URI.parse('http://vs099.virtual.fhstp.ac.at/~dm101507/geotextservice/API/user/register')
+url = URI.parse('http://vs099.virtual.fhstp.ac.at/~dm101507/geotextservice/API/user/login')
 
-xml = IO.read("register.xml")
+xml = IO.read("login.xml")
 
 request = Net::HTTP::Post.new(url.path)
 
