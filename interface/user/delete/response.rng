@@ -6,19 +6,16 @@
 					<data type='string' />
 				</attribute>
 				<zeroOrMore>
-					<element name='user'>
-						<attribute name='username'>
+					<element name='delete'>
+						<attribute name='user'>
 							<data type='string'>
 								<param name='maxLength'>
-									127
+									32
 								</param>
-							</data>
-						</attribute>
-						<attribute name='timestamp'>
-							<data type='dateTime'/>
+							</data>						
 						</attribute>
 					</element>
-				</zeroOrMore>
+				</zeroOrMore>				
 			</element>
 			<element name='error'>
 				<attribute name='no'>

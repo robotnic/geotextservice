@@ -45,7 +45,6 @@ if(send_all == false)
 		response = response.gsub("<", "&lt;")
 		response = response.gsub(">", "&gt;")
 
-		puts "sending..."
 		if(response != "")
 			puts "response " , response
 		end
@@ -67,7 +66,6 @@ else
 			puts xml , "<br/>"
 
 			response = Net::HTTP.start(url.host, url.port) {|http| http.request(request)}
-
 			response = response.body
 
 
