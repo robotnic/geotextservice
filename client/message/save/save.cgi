@@ -45,7 +45,6 @@ if(send_all == false)
 		response = response.gsub("<", "&lt;")
 		response = response.gsub(">", "&gt;")
 
-		puts "sending..."
 		if(response != "")
 			puts "response " , response
 		end
