@@ -17,82 +17,75 @@ XML::Error.set_handler do |error|
 end
 
 class MessageSave
+
+  
     def call(env)
 
     req= Rack::Request.new(env)
+
+    begin  
+      doc = XML::Document.string(req.body.read);
+      relaxng_document = XML::Document.file('../../interface/message/save/request.rng')
+      relaxng_schema = XML::RelaxNG.document(relaxng_document)
+      rescue
+      //nix
+    end
     
-    
-    #Errorhandling (Check with RNG file)
-
-
-
-
-begin  
-    doc = XML::Document.string(req.body.read);
-    relaxng_document = XML::Document.file('../../interface/message/save/request.rng')
-    relaxng_schema = XML::RelaxNG.document(relaxng_document)
-    rescue
-
-else
-
     begin
-    doc.validate_relaxng(relaxng_schema)
-    rescue
-    //nix
+      doc.validate_relaxng(relaxng_schema)
+      rescue
+      //nix
     end
-end
-  
-#Errorhandling-end
-    
+
     c=req.query_string()
-
     if(c=="die")
-        abort
+      abort
     end
 
+
+  
 
     doc.find("/gts/content").each {|node| 
-    lon=node.attributes.get_attribute("lon").value; 
-    lat=node.attributes.get_attribute("lat").value;
+      lon=node.attributes.get_attribute("lon").value; 
+      lat=node.attributes.get_attribute("lat").value;
+
+      begin 
+        id = node.attributes.get_attribute("id").value;
+      rescue
+        id = nil;
+      end                
     
-    def writetodb(lat,lon,message,id=nil)
- 
+      begin                                        
+        content = node.content;
+      rescue
+        return
+      end
+    
+      writetodb(lat, lon, content,id);
+    };
+  end
+  
+  
+  def writetodb(lat,lon,message,id=nil)
+   
     $dbh=dbconnect   #hier eine global variable mit $
 
-    if id.nil?
+      if id.nil?
         sql = "insert into geopoints(lat,lon,message) values (?,?,?);"
-
+    
         st=$dbh.prepare(sql);
-
+    
         st.execute(lat,lon,message);
-
-    else
+    
+      else
         sql = "update geopoints set lat=?,lon=?,message=? where id =?;"
         
         st=$dbh.prepare(sql);
-
+    
         st.execute(lat,lon,message,id);
-    end
-
-                                           
-    begin 
-        id = node.attributes.get_attribute("id").value;
-    rescue
-        id = nil;
-    end                
-    
-    begin                                        
-        content = node.content;
-    rescue
-        return
-    end
-    
-    writetodb(lat, lon, content,id);
-    
-    };
-
-    end
-
+      end
+  end
+  
 end
 
 Rack::Handler::FastCGI.run MessageSave.new

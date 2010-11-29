@@ -24,7 +24,7 @@ if id == ""
 	send_all = true
 end
 
-url = URI.parse('http://vs099.virtual.fhstp.ac.at/~dm101507/geotextservice/API/message/save')
+url = URI.parse('http://vs099.virtual.fhstp.ac.at/~dm101527/geotextservice/API/message/save')
 
 if(send_all == false)
 	begin
