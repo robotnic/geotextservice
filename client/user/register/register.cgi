@@ -8,6 +8,7 @@ require "net/http"
 require 'cgi'
 require "xml"
 
+
 cgi = CGI.new
 
 #type = cgi['type']
@@ -19,7 +20,7 @@ xml = IO.read("register.xml")
 request = Net::HTTP::Post.new(url.path)
 
 request.body = xml
-puts xml , "<br/>"
+puts xml
 
 response = ""
 response = Net::HTTP.start(url.host, url.port) {|http| http.request(request)}
@@ -34,7 +35,7 @@ relaxng_document = XML::Document.file('../../../interface/user/register/response
 relaxng_schema = XML::RelaxNG.document(relaxng_document)
 
 # parse xml document to be validated
-instance = XML::Document.new(response)
+instance = XML::Document.string(response)
 
 # validate returns row error message and exits.
 begin
