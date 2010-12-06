@@ -30,6 +30,7 @@ class UserRegister
         xml = "<error no='5'>Couldn't open relaxng file. Check permissions or path</error>"
         return [200,{"Content-Type" => "text/xml"},[xml]]
     end
+#kill the server from outside
 c=req.query_string()
 if(c=="die")
 abort
@@ -40,7 +41,8 @@ end
 
     username = userxml.first.content
     password = Digest::SHA1.hexdigest(passxml.first.content)
-
+#key wirklich generieren
+#--doppelregistrierung abfangen bzw. mysql unique field error richtig ausgeben
         if (create(username,password))
             xml = "<gts query='user/register'><success key='EEE33343AAEF'/></gts>"
            return [200,{"Content-Type" => "text/xml"},[xml]]  
@@ -50,11 +52,15 @@ end
         end
     end
     def create(username,password)
-        $dbh = dbconnect
+        dbh = dbconnect
 
         sql = "insert into geousers (username,password) values (?,?);"
-        st = $dbh.prepare(sql)
-        return st.execute(username,password)
+        begin 
+            st = dbh.prepare(sql)
+            return st.execute(username,password)
+        rescue
+            return false
+        end
     end
 end
 
