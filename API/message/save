@@ -11,31 +11,50 @@ $dbh=dbconnect   #hier eine global variable mit $
 
 class MessageSave
 
+		def errorHandler(no, message)
+	        xml="<error no='"+no.to_s+"'>"+message+"</error>"
+	        return xml
+		end
+
   
     def call(env)
 
-    req= Rack::Request.new(env)
+		req= Rack::Request.new(env);
+		begin
+			doc = XML::Document.string(req.body.read);
+		rescue Exception => e
+			xml = "<error no='1'>XML ERROR: #{e.message}</error>"
+			return [200,{"Content-Type" => "text/xml"},[xml]] 
+		end
 
-	#Errorhandling
+		#Errorhandling
+		
 
-	#read the file
-    begin
-        relaxng_doc = XML::Document.file('../../interface/message/save/request.rng')
-        relaxng_sch = XML::RelaxNG.document(relaxng_doc)
-        #validate relax ng    
-            begin 
-                doc.validate_relaxng(relaxng_sch)
-            rescue Exception => e
-                 xml = "<error no='7'>XML ERROR: #{e.message}</error>"
-                return [200,{"Content-Type" => "text/xml"},[xml]]                
-            end
+		
 
-    rescue
-        xml = "<error no='5'>Couldn't open relaxng file. Check permissions or path</error>"
-        return [200,{"Content-Type" => "text/xml"},[xml]]
-    end
+		#read the file
+		begin
+			relaxng_doc = XML::Document.file('../../interface/message/save/request.rng')
+			relaxng_sch = XML::RelaxNG.document(relaxng_doc)
+			#validate relax ng    
+				begin 
+					doc.validate_relaxng(relaxng_sch)
+				rescue Exception => e
+					xml = "<error no='7'>XML ERROR: #{e.message}</error>"
+					return [200,{"Content-Type" => "text/xml"},[xml]]                
+				end
 
-  
+		rescue
+			xml = "<error no='5'>Couldn't open relaxng file. Check permissions or path</error>"
+			return [200,{"Content-Type" => "text/xml"},[xml]]
+		end
+				
+		#kill the server from outside
+		c=req.query_string()
+		if(c=="die")
+		abort
+		end
+	
 
     doc.find("/gts/content").each {|node| 
       lon=node.attributes.get_attribute("lon"); 
@@ -55,10 +74,9 @@ class MessageSave
     
       writetodb(lat, lon, content,id);
     };
-  end
+	end
   
-  
-  def writetodb(lat.to_f,lon.to_f,message,id=nil)
+  def writetodb(lat,lon,message,id=nil)
    
 
       if id.nil?
@@ -77,6 +95,7 @@ class MessageSave
         st.execute(lat,lon,message,id);
       end
   end
+  
   
 end
 
