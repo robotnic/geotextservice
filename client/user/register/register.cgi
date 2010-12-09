@@ -20,12 +20,13 @@ xml = IO.read("register.xml")
 request = Net::HTTP::Post.new(url.path)
 
 request.body = xml
-puts xml
+puts "<b>Request:</b>" , xml
 
 response = ""
 response = Net::HTTP.start(url.host, url.port) {|http| http.request(request)}
 response = response.body
-puts response
+puts "<br/>"
+puts "<b>Response:</b>" , response
 
 
 # parse schema as xml document
@@ -43,7 +44,7 @@ begin
 rescue Exception => e
   puts e.message
 else
-  puts "ok"
+  puts "<br/><b>RNG:</b> ok"
 end
 
 
