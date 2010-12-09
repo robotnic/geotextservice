@@ -40,41 +40,46 @@ url = URI.parse('http://vs099.virtual.fhstp.ac.at/~dm101527/geotextservice/API/m
 
 if(send_all == false)
 	begin
-	
 		xml = IO.read(type.to_s() + id.to_s() + ".xml")
-		
-		request = Net::HTTP::Post.new(url.path)
-
-		request.body = xml
-		puts xml , "<br/>"
-
-		response = Net::HTTP.start(url.host, url.port) {|http| http.request(request)}
-
-		response = response.body
-		#####################
-		##VALIDATE RELAX NG##
-		#####################
-		# parse xml document to be validated
-		instance = XML::Document.string(response)
-
-		# validate returns row error message and exits.
-		begin
-		  instance.validate_relaxng(relaxng_schema)
-		rescue Exception => e
-		  puts e.message
-		else
-		  puts "<br/><b>RNG:</b> ok"
-		end
-
-		# für response
-		response = response.gsub("<", "&lt;")
-		response = response.gsub(">", "&gt;")
-
-		if(response != "")
-			puts "response " , response
-		end
 	rescue
 		puts "fehler beim lesen von datei " + type.to_s() + id.to_s() + ".xml"
+		exit
+	end
+	
+	request = Net::HTTP::Post.new(url.path)
+
+	request.body = xml
+	puts xml , "<br/>"
+
+	response = Net::HTTP.start(url.host, url.port) {|http| http.request(request)}
+
+	response = response.body
+	#####################
+	##VALIDATE RELAX NG##
+	#####################
+	# parse xml document to be validated
+	begin
+		instance = XML::Document.string(response)
+	rescue
+		puts "Fehler im Response (XML)"
+		exit
+	end
+
+	# validate returns row error message and exits.
+	begin
+	  instance.validate_relaxng(relaxng_schema)
+	rescue Exception => e
+	  puts e.message
+	else
+	  puts "<br/><b>RNG:</b> ok"
+	end
+
+	# für response
+	response = response.gsub("<", "&lt;")
+	response = response.gsub(">", "&gt;")
+
+	if(response != "")
+		puts "response " , response
 	end
 		
 	
