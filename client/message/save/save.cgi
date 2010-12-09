@@ -10,8 +10,20 @@
 require "uri"
 require "net/http"
 require 'cgi'
+require "xml"
 
 cgi = CGI.new
+
+
+	#################
+	##LOAD RELAX NG##
+	#################
+	#parse schema as xml document
+	relaxng_document = XML::Document.file('../../../interface/message/save/response.rng')
+
+	# prepare schema for validation
+	relaxng_schema = XML::RelaxNG.document(relaxng_document)
+
 
 type = cgi['type']
 if type == "" 
@@ -39,7 +51,20 @@ if(send_all == false)
 		response = Net::HTTP.start(url.host, url.port) {|http| http.request(request)}
 
 		response = response.body
+		#####################
+		##VALIDATE RELAX NG##
+		#####################
+		# parse xml document to be validated
+		instance = XML::Document.string(response)
 
+		# validate returns row error message and exits.
+		begin
+		  instance.validate_relaxng(relaxng_schema)
+		rescue Exception => e
+		  puts e.message
+		else
+		  puts "<br/><b>RNG:</b> ok"
+		end
 
 		# für response
 		response = response.gsub("<", "&lt;")
@@ -68,6 +93,20 @@ else
 			response = Net::HTTP.start(url.host, url.port) {|http| http.request(request)}
 			response = response.body
 
+			#####################
+			##VALIDATE RELAX NG##
+			#####################
+			# parse xml document to be validated
+			instance = XML::Document.string(response)
+
+			# validate returns row error message and exits.
+			begin
+			  instance.validate_relaxng(relaxng_schema)
+			rescue Exception => e
+			  puts e.message
+			else
+			  puts "<br/><b>RNG:</b> ok"
+			end
 
 			# für response
 			response = response.gsub("<", "&lt;")
@@ -82,8 +121,6 @@ else
 		rescue
 			puts "fehler beim lesen von datei error" + the_id + ".xml"
 		end
-
-		
 
 	} 
 
