@@ -7,16 +7,7 @@ require 'rack'
 
 $dbh=dbconnect   #hier eine global variable mit $
 
-def errorHandler(no, message)
-    xml="<error no='"+no.to_s+"'>"+message+"</error>"
-    return xml
-end
 
-XML::Error.set_handler do |error|
-    xml = errorHandler(234, error.to_s)
-    [200, {"Content-Type" => "text/xml"}, [xml]]
-    return
-end
 
 class MessageSave
 
@@ -25,25 +16,24 @@ class MessageSave
 
     req= Rack::Request.new(env)
 
-    begin  
-      doc = XML::Document.string(req.body.read);
-      relaxng_document = XML::Document.file('../../interface/message/save/request.rng')
-      relaxng_schema = XML::RelaxNG.document(relaxng_document)
-      rescue
-      //nix
-    end
-    
+	#Errorhandling
+
+	#read the file
     begin
-      doc.validate_relaxng(relaxng_schema)
-      rescue
-      //nix
-    end
+        relaxng_doc = XML::Document.file('../../interface/message/save/request.rng')
+        relaxng_sch = XML::RelaxNG.document(relaxng_doc)
+        #validate relax ng    
+            begin 
+                doc.validate_relaxng(relaxng_sch)
+            rescue Exception => e
+                 xml = "<error no='7'>XML ERROR: #{e.message}</error>"
+                return [200,{"Content-Type" => "text/xml"},[xml]]                
+            end
 
-    c=req.query_string()
-    if(c=="die")
-      abort
+    rescue
+        xml = "<error no='5'>Couldn't open relaxng file. Check permissions or path</error>"
+        return [200,{"Content-Type" => "text/xml"},[xml]]
     end
-
 
   
 
