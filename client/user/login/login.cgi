@@ -1,9 +1,5 @@
 #! /usr/bin/eruby -d
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-</head>
-<body>
+<?xml version="1.0"?>
 
 <%
 
@@ -23,19 +19,16 @@ xml = IO.read("login.xml")
 request = Net::HTTP::Post.new(url.path)
 
 request.body = xml
-puts xml , "<br/>"
+puts "<b>Request:</b>" , xml
 
 response = Net::HTTP.start(url.host, url.port) {|http| http.request(request)}
 
 response = response.body
 
-# für response
-response = response.gsub("<", "&lt;")
-response = response.gsub(">", "&gt;")
-
 puts "sending..."
 if(response != "")
-	puts "response " , response
+	puts "<br/>"
+	puts "<b>Response:</b>" , response
 end
 
 # parse schema as xml document
@@ -53,9 +46,7 @@ begin
 rescue Exception => e
   puts e.message
 else
-  puts "<br/>relax ok"
+  puts "<br/><b>RNG:</b> ok"
 end
 
 %>
-</body>
-</html>
