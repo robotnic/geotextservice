@@ -89,6 +89,7 @@ else
 
 			request.body = xml
 			puts xml , "<br/>"
+			puts the_id , "<br/>"
 
 			response = Net::HTTP.start(url.host, url.port) {|http| http.request(request)}
 			response = response.body
