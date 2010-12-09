@@ -10,6 +10,7 @@
 require "uri"
 require "net/http"
 require 'cgi'
+require "xml"
 
 cgi = CGI.new
 
@@ -35,6 +36,24 @@ response = response.gsub(">", "&gt;")
 puts "sending..."
 if(response != "")
 	puts "response " , response
+end
+
+# parse schema as xml document
+relaxng_document = XML::Document.file('../../../interface/user/login/response.rng')
+
+# prepare schema for validation
+relaxng_schema = XML::RelaxNG.document(relaxng_document)
+
+# parse xml document to be validated
+instance = XML::Document.string(response)
+
+# validate returns row error message and exits.
+begin
+  instance.validate_relaxng(relaxng_schema)
+rescue Exception => e
+  puts e.message
+else
+  puts "<br/>relax ok"
 end
 
 %>
