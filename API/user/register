@@ -5,6 +5,7 @@ require 'connect.rb'
 require 'xml'
 require 'rack'
 require 'digest/sha1'
+require 'session.rb'
 
 class UserRegister
     def call(env)
@@ -41,13 +42,14 @@ end
 
     username = userxml.first.content
     password = Digest::SHA1.hexdigest(passxml.first.content)
-#key wirklich generieren
-#--doppelregistrierung abfangen bzw. mysql unique field error richtig ausgeben
+
         if (create(username,password))
-            xml = "<gts query='user/register'><success key='EEE33343AAEF'/></gts>"
+            key = get_session_key()
+
+            xml = "<gts query='user/register'><success key='#{key}'/></gts>"
            return [200,{"Content-Type" => "text/xml"},[xml]]  
         else
-            xml = "<error no='6'>you fail</error>"
+            xml = "<error no='6'>The User already exists.</error>"
            return [200,{"Content-Type" => "text/xml"},[xml]]  
         end
     end
