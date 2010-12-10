@@ -1,5 +1,5 @@
-<gts query='message/save'>
-<content lat='48.2' lon='15.6' id='234' user='franz' timestamp='2010-10-03T20:35:37'>
+<gts key='EF988339EED5598DE8888776222EEAAA'>
+<content lat='48.2' lon='15.6'>
 Hier kommt das grosse Blabla
 </content>
 </gts>

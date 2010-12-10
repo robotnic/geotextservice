@@ -13,9 +13,9 @@ cgi = CGI.new
 
 #type = cgi['type']
 
-url = URI.parse('http://vs099.virtual.fhstp.ac.at/~dm101507/geotextservice/API/user/register')
+url = URI.parse('http://vs099.virtual.fhstp.ac.at/~dm101507/geotextservice/API/user/delete')
 
-xml = IO.read("register.xml")
+xml = IO.read("delete.xml")
 
 request = Net::HTTP::Post.new(url.path)
 
@@ -30,7 +30,7 @@ puts "<b>Response:</b>" , response
 
 
 # parse schema as xml document
-relaxng_document = XML::Document.file('../../../interface/user/register/response.rng')
+relaxng_document = XML::Document.file('../../../interface/user/delete/response.rng')
 
 # prepare schema for validation
 relaxng_schema = XML::RelaxNG.document(relaxng_document)
@@ -51,3 +51,4 @@ end
 
 
 %>
+

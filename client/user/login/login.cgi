@@ -1,15 +1,12 @@
 #! /usr/bin/eruby -d
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-</head>
-<body>
+<?xml version="1.0"?>
 
 <%
 
 require "uri"
 require "net/http"
 require 'cgi'
+require "xml"
 
 cgi = CGI.new
 
@@ -22,21 +19,34 @@ xml = IO.read("login.xml")
 request = Net::HTTP::Post.new(url.path)
 
 request.body = xml
-puts xml , "<br/>"
+puts "<b>Request:</b>" , xml
 
 response = Net::HTTP.start(url.host, url.port) {|http| http.request(request)}
 
 response = response.body
 
-# für response
-response = response.gsub("<", "&lt;")
-response = response.gsub(">", "&gt;")
-
 puts "sending..."
 if(response != "")
-	puts "response " , response
+	puts "<br/>"
+	puts "<b>Response:</b>" , response
+end
+
+# parse schema as xml document
+relaxng_document = XML::Document.file('../../../interface/user/login/response.rng')
+
+# prepare schema for validation
+relaxng_schema = XML::RelaxNG.document(relaxng_document)
+
+# parse xml document to be validated
+instance = XML::Document.string(response)
+
+# validate returns row error message and exits.
+begin
+  instance.validate_relaxng(relaxng_schema)
+rescue Exception => e
+  puts e.message
+else
+  puts "<br/><b>RNG:</b> ok"
 end
 
 %>
-</body>
-</html>
