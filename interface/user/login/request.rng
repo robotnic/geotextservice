@@ -1,0 +1,23 @@
+<grammar xmlns= 'http://relaxng.org/ns/structure/1.0' datatypeLibrary='http://www.w3.org/2001/XMLSchema-datatypes'>
+    <start>
+            <element xmlns= 'http://relaxng.org/ns/structure/1.0' name='gts'>
+
+                        <element name='username'>
+                                        <data type='string'>
+                                                            <param name='maxLength'>
+                                                                                    80
+                                                                                                        </param>
+                                                                                                                        </data>
+                                                                                                                                    </element>
+
+                                                                                                                                                <element name='key'>
+                                                                                                                                                                <data type='string'>
+                                                                                                                                                                                    <param name='maxLength'>
+                                                                                                                                                                                                            40
+                                                                                                                                                                                                                                </param>
+                                                                                                                                                                                                                                                </data>
+                                                                                                                                                                                                                                                            </element>
+
+                                                                                                                                                                                                                                                                    </element>
+                                                                                                                                                                                                                                                                        </start>
+                                                                                                                                                                                                                                                                        </grammar>
