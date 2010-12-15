@@ -17,7 +17,8 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF  OR IN CONNECTION WITH  THE CODE OR THE  USE OR OTHER  DEALINGS IN THE
 # CODE.
-
+#
+# http://coderepos.org/share/browser/lang/ruby/uuid/   
 %w[
 	digest/md5
 	digest/sha1

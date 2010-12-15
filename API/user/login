@@ -4,6 +4,7 @@ require 'rubygems'
 require 'connect.rb'
 require 'xml'
 require 'rack'
+require 'key.rb'
 
 class UserLogin
     def call(env)
@@ -19,8 +20,23 @@ class UserLogin
     doc.find("/gts/password") {|node| 
     password = node.content;
     };
+    #at request check if user is logged in
+    #login or update
+    end
+    def login(username, key)
+        dbh = dbconnect
 
-puts username;
-puts password;
-
+        sql = "insert into geologgedin (username,KEY) values (?,?);"
+        begin
+            st = dbh.prepare(sql)
+            st.execute(username, key)
+            
+           xml = "<gts query='user/login'><success key='#{key}'/></gts>"
+           return [200,{"Content-Type" => "text/xml"},[xml]]  
+ 
+       rescue Exception => e
+           xml = "<error no='6'>DB Error: #{e.message}.</error>"
+           return [200,{"Content-Type" => "text/xml"},[xml]]  
+        end
+    end
 end
