@@ -11,25 +11,19 @@ $dbh=dbconnect   #hier eine global variable mit $
 
 class MessageSave
 
-		def errorHandler(no, message)
-	        xml="<error no='"+no.to_s+"'>"+message+"</error>"
-	        return xml
-		end
-
   
     def call(env)
 
 		req= Rack::Request.new(env);
+
+		#Errorhandling
+		
 		begin
 			doc = XML::Document.string(req.body.read);
 		rescue Exception => e
 			xml = "<error no='1'>XML ERROR: #{e.message}</error>"
 			return [200,{"Content-Type" => "text/xml"},[xml]] 
 		end
-
-		#Errorhandling
-		
-
 		
 
 		#read the file
@@ -77,6 +71,7 @@ class MessageSave
 	end
   
   def writetodb(lat,lon,message,id=nil)
+    puts 
    
 
       if id.nil?

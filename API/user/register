@@ -5,12 +5,18 @@ require 'connect.rb'
 require 'xml'
 require 'rack'
 require 'digest/sha1'
+require 'key.rb'
 
 class UserRegister
     def call(env)
     
     req = Rack::Request.new(env)
-    doc = XML::Document.string(req.body.read)
+    begin 
+        doc = XML::Document.string(req.body.read)
+    rescue Exception => e
+        xml = "<error no='1'>XML ERROR: #{e.message}</error>"
+        return [200,{"Content-Type" => "text/xml"},[xml]]                
+     end
 
 #Errorhandling
 
@@ -22,12 +28,12 @@ class UserRegister
             begin 
                 doc.validate_relaxng(relaxng_sch)
             rescue Exception => e
-                 xml = "<error no='7'>XML ERROR: #{e.message}</error>"
+                 xml = "<error no='2'>XML Validation ERROR: #{e.message}</error>"
                 return [200,{"Content-Type" => "text/xml"},[xml]]                
             end
 
     rescue
-        xml = "<error no='5'>Couldn't open relaxng file. Check permissions or path</error>"
+        xml = "<error no='3'>Couldn't open relaxng file. Check permissions or path</error>"
         return [200,{"Content-Type" => "text/xml"},[xml]]
     end
 #kill the server from outside
@@ -41,25 +47,25 @@ end
 
     username = userxml.first.content
     password = Digest::SHA1.hexdigest(passxml.first.content)
-#key wirklich generieren
-#--doppelregistrierung abfangen bzw. mysql unique field error richtig ausgeben
-        if (create(username,password))
-            xml = "<gts query='user/register'><success key='EEE33343AAEF'/></gts>"
-           return [200,{"Content-Type" => "text/xml"},[xml]]  
-        else
-            xml = "<error no='6'>you fail</error>"
-           return [200,{"Content-Type" => "text/xml"},[xml]]  
-        end
+
+    create(username,password)
+
+    key = get_session_key()
     end
     def create(username,password)
         dbh = dbconnect
 
         sql = "insert into geousers (username,password) values (?,?);"
         begin 
-            st = dbh.prepare(sql)
-            return st.execute(username,password)
-        rescue
-            return false
+           st = dbh.prepare(sql)
+           st.execute(username,password)
+ 
+           xml = "<gts query='user/register'><success key='#{key}'/></gts>"
+           return [200,{"Content-Type" => "text/xml"},[xml]]  
+ 
+       rescue Exception => e
+           xml = "<error no='6'>DB Error: #{e.message}.</error>"
+           return [200,{"Content-Type" => "text/xml"},[xml]]  
         end
     end
 end
