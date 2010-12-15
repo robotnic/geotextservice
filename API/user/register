@@ -5,7 +5,7 @@ require 'connect.rb'
 require 'xml'
 require 'rack'
 require 'digest/sha1'
-require 'session.rb'
+require 'key.rb'
 
 class UserRegister
     def call(env)
@@ -48,25 +48,24 @@ end
     username = userxml.first.content
     password = Digest::SHA1.hexdigest(passxml.first.content)
 
-        if (create(username,password))
-            key = get_session_key()
+    create(username,password)
 
-            xml = "<gts query='user/register'><success key='#{key}'/></gts>"
-           return [200,{"Content-Type" => "text/xml"},[xml]]  
-        else
-            xml = "<error no='6'>The User already exists.</error>"
-           return [200,{"Content-Type" => "text/xml"},[xml]]  
-        end
+    key = get_session_key()
     end
     def create(username,password)
         dbh = dbconnect
 
         sql = "insert into geousers (username,password) values (?,?);"
         begin 
-            st = dbh.prepare(sql)
-            return st.execute(username,password)
-        rescue
-            return false
+           st = dbh.prepare(sql)
+           st.execute(username,password)
+ 
+           xml = "<gts query='user/register'><success key='#{key}'/></gts>"
+           return [200,{"Content-Type" => "text/xml"},[xml]]  
+ 
+       rescue Exception => e
+           xml = "<error no='6'>DB Error: #{e.message}.</error>"
+           return [200,{"Content-Type" => "text/xml"},[xml]]  
         end
     end
 end
