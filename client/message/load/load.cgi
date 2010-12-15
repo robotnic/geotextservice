@@ -11,16 +11,16 @@ require "xml"
 
 cgi = CGI.new
 
-#type = cgi['type']
+query =
 
-url = URI.parse('http://vs099.virtual.fhstp.ac.at/~dm101507/geotextservice/API/message/load')
 
-xml = IO.read("load.xml")
+url = URI.parse('http://vs099.virtual.fhstp.ac.at/~dm101507/geotextservice/API/message/load?', query)
+
+#xml = IO.read("load.xml")
 
 request = Net::HTTP::Post.new(url.path)
 
-request.body = xml
-puts "<b>Request:</b>" , xml
+puts "<b>Query:</b>" , query
 
 response = ""
 response = Net::HTTP.start(url.host, url.port) {|http| http.request(request)}
