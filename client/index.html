@@ -1,0 +1,314 @@
+<html>
+<head>
+ <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<style type="text/css">
+html,body{
+overflow:hidden;
+font-family:Arial,sans-serif;
+}
+#panel{
+position:absolute;
+top:100px;
+left:20px;
+border:1px solid grey;
+right:20px;
+bottom:20px;
+
+border:1px solid #efefef;
+padding:5px;
+background-color:white;
+-moz-box-shadow: 1px 1px 14px #dfdfdf;
+-webkit-box-shadow: 1px 1px 14px #dfdfdf;
+box-shadow: 1px 1px 14px #dfdfdf; 
+}
+#map{
+position:absolute;
+top:5px;
+left:300px;
+right:5px;
+bottom:5px;
+background-image:url(images/checkerboard.gif);
+}
+
+#navi{
+position:absolute;
+top:50px;
+left:200px;
+}
+#navi li{
+display:table-cell;
+width:100px;
+margin:4px;
+padding:5px;
+}
+li div{
+border:1px solid #efefef;
+
+-moz-border-radius: 15px;
+-webkit-border-radius: 15px;
+border-radius: 15px;
+padding: 5px 15px 15px 15px;
+#background-color:white;
+
+text-align:center;
+}
+#naviselected  div {
+background-color:lightgrey;
+border:1px solid grey;
+color:white;
+font-weight:bold;
+}
+
+#searchfield{
+border:1px solid gray;
+font-size:22px;
+width:200px;
+}
+
+#userfield{
+border:1px solid gray;
+font-size:22px;
+width:200px;
+}
+
+#markertext{
+border:1px solid gray;
+font-size:22px;
+width:200px;
+}
+
+#loginwindow{
+        background-color:white;
+        border:1px solid black;
+        position:absolute;
+        top:100px;
+        left:100px;
+        display:none;
+
+}
+#loginbutton{
+position:absolute;
+top:0px;right:0px;
+}
+
+#key{
+position:absolute;
+top:0px;
+right:100px;
+}
+
+.geotext{
+width:100px;
+margin-left:-50px;
+padding:5px;
+font-size:12px;
+
+-moz-border-radius: 5px;
+-webkit-border-radius: 5px;
+border-radius: 5px;
+
+
+}
+
+</style>
+<script type="text/javascript" src="http://vs099.virtual.fhstp.ac.at/~zwischenbrugger/khtmlib/js/khtml.js"> </script>
+<script type="text/javascript" src="http://vs099.virtual.fhstp.ac.at/~zwischenbrugger/khtmlib/js/kmarker.js"> </script>
+<script type="text/javascript">
+
+var mr=new Object(khtml.maplib);
+var map=null;
+ 
+var key=null;
+//var server="proxy.php?request=";
+var server="/~zwischenbrugger/project/geotextservice/API";
+ 
+function init(){
+	map=new mr.Map(document.getElementById("map"));  //dom element
+	var center=new mr.Point(48.2,15.6);  //latitude, longitude
+	map.centerAndZoom(center,12); //12 = zoomlevel
+        map.addCallbackFunction(loadit);
+
+	load();
+	setInterval("load()",20000);
+}
+var loadTimeout=null;
+function loadit(){
+	if(loadTimeout){
+		clearTimeout(loadTimeout);
+	}
+	loadTimeout=setTimeout("load()",100);
+}
+
+function load(){
+        var xmlhttp=new XMLHttpRequest();
+	var boundsParam="[bbox="+map.bounds().sw().lat()+","+map.bounds().sw().lng()+","+map.bounds().ne().lat()+","+map.bounds().ne().lng()+"]";
+	var userParam="";
+	if(document.getElementById("userfield").value){
+		var userParam="[user="+document.getElementById("userfield").value+"]";
+	}
+	var searchParam="";
+	if(document.getElementById("searchfield").value){
+		var searchParam="[search="+document.getElementById("searchfield").value+"]";
+	}
+//      xmlhttp.open("GET","http://vs099.virtual.fhstp.ac.at/~zwischenbrugger/project/geotextservice/API/message/load",true);
+	var url=server+"/message/load?"+boundsParam+userParam+searchParam;
+	//alert(url);
+        xmlhttp.open("GET",url,true);
+        xmlhttp.onreadystatechange=function(){
+                if(xmlhttp.readyState==4){
+			if(xmlhttp.responseXML.documentElement.tagName=="error"){
+                                alert(xmlhttp.responseText);
+                                return;
+                        } 
+
+                        render(xmlhttp.responseXML);
+                }
+        }
+        xmlhttp.send(null);
+}
+
+function render(dom){
+	map.removeOverlays();
+        var contents=dom.documentElement.childNodes;
+        for(var i=0; i < contents.length;i++){
+                var content=contents.item(i);
+                if(content.nodeType==1){
+                        if(content.tagName=="content"){
+                                if(content.firstChild){
+                                        var text=content.firstChild.nodeValue;
+                                        var lat=content.getAttribute("lat");
+                                        var lon=content.getAttribute("lon");
+                                        var point=new mr.Point(lat,lon);
+                                        var div=document.createElement("div");
+					div.setAttribute("class","geotext");
+                                        var tn=document.createTextNode(text);
+                                        div.appendChild(tn);
+                                        div.style.backgroundColor="white";
+                                        div.style.border="1px solid black";
+                                        var marker=new mr.Marker(point,div);
+                                        map.addOverlay(marker);
+                                }
+
+                        }
+
+                }
+
+        }
+
+}
+
+function save(){
+        var text=document.getElementById("markertext").value;
+        var lat=map.center().lat();
+        var lon=map.center().lng();
+        var xml="<gts key='"+key+"'><content lat='"+lat+"' lon='"+lon+"'>"+text+"</content></gts>";
+        
+        var xmlhttp=new XMLHttpRequest();
+        xmlhttp.open("POST",server+"/message/save",true);
+        xmlhttp.onreadystatechange=function(){
+                if(xmlhttp.readyState==4){
+                        if(xmlhttp.responseXML.documentElement.tagName=="error"){
+                                alert(xmlhttp.responseText);
+                                return;
+                        } 
+                        render(xmlhttp.responseXML);
+                }
+        }
+        //alert(xml);
+        xmlhttp.send(xml);
+}
+
+function login(){
+        user("login");
+}
+
+function register(){
+        user("register");
+}
+
+function user(type){
+        var username=document.getElementById("username").value;
+        var password=document.getElementById("password").value;
+        var xml="<gts><username>"+username+"</username><password>"+password+"</password></gts>";
+
+        var xmlhttp=new XMLHttpRequest();
+        xmlhttp.overrideMimeType('text/xml');
+        xmlhttp.open("POST",server+"/user/"+type,true);
+        xmlhttp.onreadystatechange=function(){
+                if(xmlhttp.readyState==4){
+                                //alert(xmlhttp.responseText);
+                        var dom=xmlhttp.responseXML;
+                        if(dom.documentElement.tagName=="error"){
+                                alert(xmlhttp.responseText);
+                                return;
+                        }       
+                        key=dom.getElementsByTagName("success").item(0).getAttribute("key");
+                        document.getElementById("key").firstChild.nodeValue="key: "+key;
+                }
+        }
+        xmlhttp.send(xml);
+        document.getElementById('loginwindow').style.display='none';
+}
+
+</script>
+</head>
+<body onload="init()">
+<button id="loginbutton" onmousedown="document.getElementById('loginwindow').style.display='block'">login/register</button>
+<div id="key">not logged in</div>
+
+<div style="color:gray;padding-left:15px">
+<h1 style="margin:0">GeoTextService</h1>
+Das Best wo gibt.
+</div>
+<ul id="navi">
+<li id="naviselected"><div>Map</div></li>
+<li><div>Edit</div></li>
+<li><div>Tracker</div></li>
+<li><div>Routing</div></li>
+</ul>
+<div id="panel">
+
+<div id="search">
+<h4>Fulltext Search</h4>
+<input type="text" id="searchfield"/>
+
+<h4>User Search</h4>
+<input type="text" id="userfield"/>
+<br/>
+<button onmousedown="load()">search</button>
+
+<h4>Add New Text</h4>
+<textarea id="markertext">
+</textarea>
+<br/>
+
+<button onmousedown="save()">save</button>
+
+</div>
+<div id="map">
+</div>
+</div>
+
+
+<table id="loginwindow">
+<tr>
+<td>username</td>
+<td><input type="text" id="username"/></td>
+</tr>
+<tr>
+<td>password</td>
+
+<td><input type="text" id="password"/></td>
+</tr>
+<tr>
+
+<td><button onmousedown="login()"> login</button></td>
+<td><button onmousedown="register()"> register</button></td>
+</tr>
+
+</table>
+
+
+</body>
+</html>
+

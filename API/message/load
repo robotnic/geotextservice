@@ -1,9 +1,11 @@
 #! /usr/bin/ruby
 
 require 'rubygems'
-require 'connect.rb'
+require '../functions/connect.rb'
 require 'rack'
 require 'xml'
+
+ $dbh=dbconnect
 
 class MessageLoad
     def call(env)
@@ -25,7 +27,6 @@ puts bboxarray[2]
 puts bboxarray[3]
 
 end
-    $dbh=dbconnect
     
     sql="select * from geopoints";
 

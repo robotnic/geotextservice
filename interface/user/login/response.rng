@@ -8,14 +8,14 @@
 				<element name='username'>
 					<data type='string'>
 						<param name='maxLength'>
-							32
+							50
 						</param>
 					</data>						
 				</element>
 				<element name='key'>
 					<data type='string'>
 						<param name='maxLength'>
-							32
+							40
 						</param>
 					</data>	
 				</element>

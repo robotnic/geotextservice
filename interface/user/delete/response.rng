@@ -10,7 +10,7 @@
 						<attribute name='user'>
 							<data type='string'>
 								<param name='maxLength'>
-									32
+									50
 								</param>
 							</data>						
 						</attribute>

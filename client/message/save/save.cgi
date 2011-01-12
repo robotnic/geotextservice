@@ -1,10 +1,5 @@
 #! /usr/bin/eruby -d
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-</head>
-<body>
-
+<?xml version="1.0" encoding="UTF-8"?>
 <%
 
 require "uri"
@@ -49,7 +44,7 @@ if(send_all == false)
 	request = Net::HTTP::Post.new(url.path)
 
 	request.body = xml
-	puts xml , "<br/>"
+	#puts xml , "<br/>"
 
 	response = Net::HTTP.start(url.host, url.port) {|http| http.request(request)}
 
@@ -71,15 +66,15 @@ if(send_all == false)
 	rescue Exception => e
 	  puts e.message
 	else
-	  puts "<br/><b>RNG:</b> ok"
+	  puts "<RNG>ok</RNG>"
 	end
 
 	# für response
-	response = response.gsub("<", "&lt;")
-	response = response.gsub(">", "&gt;")
+	#response = response.gsub("<", "&lt;")
+	#response = response.gsub(">", "&gt;")
 
 	if(response != "")
-		puts "response " , response
+		puts response
 	end
 		
 	
@@ -109,18 +104,18 @@ else
 			begin
 			  instance.validate_relaxng(relaxng_schema)
 			rescue Exception => e
-			  puts e.message
+			  puts "<RNG>" + e.message + "</RNG>"
 			else
-			  puts "<b>RNG:</b> ok"
+			  puts "<RNG>ok</RNG>"
 			end
 
 			# für response
-			response = response.gsub("<", "&lt;")
-			response = response.gsub(">", "&gt;")
+			#response = response.gsub("<", "&lt;")
+			#response = response.gsub(">", "&gt;")
 
 			puts "sending..."
 			if(response != "")
-				puts "response " , response
+				puts response
 			end
 		rescue
 			puts "fehler beim lesen von datei error" + the_id + ".xml"
@@ -136,5 +131,3 @@ end
 
 
 %>
-</body>
-</html>
