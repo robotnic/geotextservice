@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>Meine ersten Ajax Erfahrungen</title>
+        <title>Dashboard</title>
         <script type="text/javascript">
          <!--    
              function doIt(){
@@ -39,9 +39,8 @@
                             if(req.status!=200) {
                                 alert("Fehler:"+req.status); 
                             }else{    
-                                alert(req.responseText);
                                 //schreibe die antwort in den div container mit der id content 
-                                document.getElementById('eins').innerHTML = '<strong>'+
+                                document.getElementById('ausgabe1').innerHTML = '<strong>'+
                                                                         req.responseText
                                                                         +'</strong>';
                             }
@@ -62,7 +61,12 @@
     </head>
     <body>
         <div id="eins" style="width: 80%; height: 80%; border: dashed 1px;">
-            <input type="button" onclick="doIt();" value="Mach was!"/>
+            <table>
+            <th><h1>Funktionsliste</h1></th>
+				<tr>
+					<td style="width:200px;"><td><img src ="rot.png"></td><td>Funktion 1</td><td><input type="button" onClick="doIt();" value="Script check!"/></td><td id="ausgabe1"></td>
+				</tr>
+			</table>
         </div>
     </body>
 </html>
