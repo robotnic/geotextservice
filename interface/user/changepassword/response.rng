@@ -5,7 +5,8 @@
 				<attribute name='query'>
 					<data type='string' />
 				</attribute>
-				<element name='success'>						
+				<element name='success'>
+					<empty />
 				</element>
 			</element>
 			<element name='error'>

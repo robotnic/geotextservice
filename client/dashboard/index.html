@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>Meine ersten Ajax Erfahrungen</title>
+        <title>Dashboard</title>
         <script type="text/javascript">
          <!--    
              function doIt(){
@@ -39,11 +39,8 @@
                             if(req.status!=200) {
                                 alert("Fehler:"+req.status); 
                             }else{    
-                                alert(req.responseText);
                                 //schreibe die antwort in den div container mit der id content 
-                                document.getElementById('eins').innerHTML = '<strong>'+
-                                                                        req.responseText
-                                                                        +'</strong>';
+                                document.getElementById('ausgabe1').innerHTML = '<strong>'+ req.responseText +'</strong>';
                             }
                             break;
                     
@@ -61,8 +58,25 @@
         </script>
     </head>
     <body>
-        <div id="eins" style="width: 80%; height: 80%; border: dashed 1px;">
-            <input type="button" onclick="doIt();" value="Mach was!"/>
+        <div id="funktionsliste" style="width: 80%; height: 80%; border: dashed 1px;">
+            <table style="width:800px; height:600px;">
+            <th><h2>Funktionsliste</h2></th>
+				<tr>
+					<td style="width:200px;"><td><img src ="rot.png" width="19px" height="19px"></td><td>Funktion 1</td><td><input type="button" onClick="doIt();" value="Script check!"/></td><td id="ausgabe1"></td>
+				</tr>
+                <tr>
+					<td style="width:200px;"><td><img src ="rot.png"></td><td>Funktion 2</td><td><input type="button" onClick="doIt();" value="Script check!"/></td><td id="ausgabe2"></td>
+				</tr>
+                <tr>
+					<td style="width:200px;"><td><img src ="rot.png"></td><td>Funktion 3</td><td><input type="button" onClick="doIt();" value="Script check!"/></td><td id="ausgabe3"></td>
+				</tr>
+                <tr>
+					<td style="width:200px;"><td><img src ="rot.png"></td><td>Funktion 4</td><td><input type="button" onClick="doIt();" value="Script check!"/></td><td id="ausgabe4"></td>
+				</tr>
+                <tr>
+					<td style="width:200px;"><td><img src ="rot.png"></td><td>Funktion 5</td><td><input type="button" onClick="doIt();" value="Script check!"/></td><td id="ausgabe5"></td>
+				</tr>
+			</table>
         </div>
     </body>
 </html>
