@@ -5,7 +5,7 @@
 		<element name='username'>
 				<data type='string'>
 					<param name='maxLength'>
-						127
+						40	
 					</param>
 				</data>
 			</element>
