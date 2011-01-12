@@ -1,13 +1,14 @@
 #! /usr/bin/ruby
 
 require 'rubygems'
-require 'connect.rb'
+require '../functions/connect.rb'
 require 'xml'
 require 'rack'
 require 'digest/sha1'
-require 'uuid.rb'
+require '../functions/uuid.rb'
 
 XML::Error.set_handler(&XML::Error::QUIET_HANDLER)
+$dbh = dbconnect
 
 class UserRegister
     def call(env)
@@ -56,11 +57,10 @@ end
 
     end
     def create(username,password)
-        dbh = dbconnect
 
         sql = "insert into geousers (username,password) values (?,?);"
         begin 
-           st = dbh.prepare(sql)
+           st = $dbh.prepare(sql)
            st.execute(username,password)
 
            key = UUID.create.to_s
@@ -68,7 +68,7 @@ end
         #   login(username,key)
            sql2 = "insert into geologgedin (username, logginschlussel) values (?,?);"
 
-           st2 = dbh.prepare(sql2)
+           st2 = $dbh.prepare(sql2)
            st2.execute(username,key)
 
            xml = "<gts query='user/register'><success key='#{key}'/></gts>"
