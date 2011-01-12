@@ -1,10 +1,10 @@
 #! /usr/bin/ruby
 
 require 'rubygems'
-require '../functions/connect.rb'
+require "../functions/connect.rb"
 require 'xml'
 require 'rack'
-require '..functions/uuid.rb'
+require '../functions/uuid.rb'
 
 XML::Error.set_handler(&XML::Error::QUIET_HANDLER)
 $dbh = dbconnect
@@ -47,6 +47,8 @@ end
 
     username = doc.find("/gts/username").first.content
     password = Digest::SHA1.hexdigest(doc.find("/gts/password").first.content)
+    puts username
+    puts password
 
     #at request check if user is logged in
     #login or update
@@ -57,7 +59,7 @@ end
         begin
            st = $dbh.prepare(sql)
            st.execute(username, key)
-           xml = "<gts query='user/login'><success key='#{key}'/></gts>"
+           xml = "<gts query='user/login'><username>#{username}</username><key>#{key}</key></gts>"
            return [200,{"Content-Type" => "text/xml"},[xml]]  
        rescue Exception => e
            xml = "<error no='6'>DB Error: #{e.message}.</error>"
