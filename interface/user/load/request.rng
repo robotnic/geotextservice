@@ -4,7 +4,7 @@
 	<attribute name='key'>
 		<data type='string'>
 			<param name='maxLength'>					
-				127
+				40
 			</param>
 		</data>
 	</attribute>
