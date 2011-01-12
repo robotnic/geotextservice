@@ -3,50 +3,8 @@
 
 <%
 
-require "uri"
-require "net/http"
-require 'cgi'
-require "xml"
+require "../../functions.rb"
 
-cgi = CGI.new
-
-#type = cgi['type']
-
-url = URI.parse('http://vs099.virtual.fhstp.ac.at/~dm101507/geotextservice/API/user/login')
-
-xml = IO.read("login.xml")
-
-request = Net::HTTP::Post.new(url.path)
-
-request.body = xml
-puts "<b>Request:</b>" , xml
-
-response = Net::HTTP.start(url.host, url.port) {|http| http.request(request)}
-
-response = response.body
-
-puts "sending..."
-if(response != "")
-	puts "<br/>"
-	puts "<b>Response:</b>" , response
-end
-
-# parse schema as xml document
-relaxng_document = XML::Document.file('../../../interface/user/login/response.rng')
-
-# prepare schema for validation
-relaxng_schema = XML::RelaxNG.document(relaxng_document)
-
-# parse xml document to be validated
-instance = XML::Document.string(response)
-
-# validate returns row error message and exits.
-begin
-  instance.validate_relaxng(relaxng_schema)
-rescue Exception => e
-  puts e.message
-else
-  puts "<br/><b>RNG:</b> ok"
-end
+getResponse('../../../interface/user/login/response.rng', 'http://vs099.virtual.fhstp.ac.at/~dm101507/geotextservice/API/user/login', 8, 1)
 
 %>
