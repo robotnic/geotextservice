@@ -40,9 +40,7 @@
                                 alert("Fehler:"+req.status); 
                             }else{    
                                 //schreibe die antwort in den div container mit der id content 
-                                document.getElementById('ausgabe1').innerHTML = '<strong>'+
-                                                                        req.responseText
-                                                                        +'</strong>';
+                                document.getElementById('ausgabe1').innerHTML = '<strong>'+ req.responseText +'</strong>';
                             }
                             break;
                     
@@ -60,7 +58,7 @@
         </script>
     </head>
     <body>
-        <div id="eins" style="width: 80%; height: 80%; border: dashed 1px;">
+        <div id="funktionsliste" style="width: 80%; height: 80%; border: dashed 1px;">
             <table>
             <th><h1>Funktionsliste</h1></th>
 				<tr>
