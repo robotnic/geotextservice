@@ -8,7 +8,7 @@
                         	        </param>
                         	</data>
                		</element>
-               		<element name='passwort'>
+               		<element name='password'>
                     		<data type='string'>
                         		<param name='maxLength'>
                         			127
