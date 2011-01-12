@@ -61,7 +61,7 @@ if(send_all == false)
 	begin
 		instance = XML::Document.string(response)
 	rescue
-		puts "Fehler im Response (XML)"
+		puts "Fehler im Response (XML)", instance
 		exit
 	end
 
