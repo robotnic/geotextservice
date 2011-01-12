@@ -3,7 +3,7 @@
         <title>Dashboard</title>
         <script type="text/javascript">
          <!--    
-             function doIt(){
+             function doIt(pfad){
              
                  //erstellen des requests
                  var req = null;
@@ -30,7 +30,7 @@
                   
                   //anfrage erstellen (GET, url ist localhost,
                   //request ist asynchron      
-                  req.open("GET", 'http://vs099.virtual.fhstp.ac.at/~dm101506/geotextservice/client/dashboard/test.txt', true);
+                  req.open("GET", 'http://vs099.virtual.fhstp.ac.at/~dm101506/geotextservice/client/message/save/'+ pfad, true);
 
                 //Beim abschliessen des request wird diese Funktion ausgeführt
                 req.onreadystatechange = function(){            
@@ -62,7 +62,7 @@
             <table style="width:800px; height:600px;">
             <th><h2>Funktionsliste</h2></th>
 				<tr>
-					<td width="145" align="right"><img src ="rot.png" width="19px" height="19px"></td><td width="148">Funktion 1</td><td width="474"><input type="button" onClick="doIt();" value="Script check!"/></td><td width="13" id="ausgabe1"></td>
+					<td width="145" align="right"><img src ="rot.png" width="19px" height="19px"></td><td width="148">Funktion 1</td><td width="474"><input type="button" onClick="doIt('save.cgi?type=error&id=01');" value="Script check!"/></td><td width="13" id="ausgabe1"></td>
 				</tr>
                 <tr>
 					<td width="145" align="right"><img src ="rot.png" width="19px" height="19px"></td><td width="148">Funktion 2</td><td width="474"><input type="button" onClick="doIt();" value="Script check!"/></td><td width="13" id="ausgabe2"></td>
