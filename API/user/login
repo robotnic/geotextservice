@@ -1,12 +1,13 @@
 #! /usr/bin/ruby
 
 require 'rubygems'
-require 'connect.rb'
+require '../functions/connect.rb'
 require 'xml'
 require 'rack'
-require 'uuid.rb'
+require '..functions/uuid.rb'
 
 XML::Error.set_handler(&XML::Error::QUIET_HANDLER)
+$dbh = dbconnect
 
 class UserLogin
     def call(env)
@@ -51,11 +52,10 @@ end
     #login or update
     end
     def login(username, key, register)
-        dbh = dbconnect
-
+        
         sql = "insert into geologgedin (username,logginschlussel) values (?,?);"
         begin
-           st = dbh.prepare(sql)
+           st = $dbh.prepare(sql)
            st.execute(username, key)
            xml = "<gts query='user/login'><success key='#{key}'/></gts>"
            return [200,{"Content-Type" => "text/xml"},[xml]]  
