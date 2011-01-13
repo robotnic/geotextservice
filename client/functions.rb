@@ -100,7 +100,7 @@ def getResponse(relaxDocument, requestUrl, erroranzahl, correctanzahl)
 					end
 					response = response.body
 					puts "Response:"
-					puts response.body
+					puts response
 
 					#####################
 					##VALIDATE RELAX NG##
