@@ -50,7 +50,7 @@ function doAjax(script,id) {
 	//erstellen des requests
 	var req = null;
 
-	var path = "http://vs099.virtual.fhstp.ac.at/~dm101513/geotextservice/client/message/save/error";
+	var path = "http://vs099.virtual.fhstp.ac.at/~dm101513/geotextservice/client/message/save/";
 	
 	try{
 		req = new XMLHttpRequest();
