@@ -1,0 +1,69 @@
+#! /usr/bin/ruby
+
+require 'rubygems'
+require "../functions/connect.rb"
+require 'xml'
+require 'rack'
+require '../functions/uuid.rb'
+
+XML::Error.set_handler(&XML::Error::QUIET_HANDLER)
+$dbh = dbconnect
+
+class UserLogin
+    def call(env)
+
+    req= Rack::Request.new(env)
+    
+     begin 
+        doc = XML::Document.string(req.body.read)
+    rescue Exception => e
+        xml = "<error no='1'>XML ERROR: #{e.message}</error>"
+        return [200,{"Content-Type" => "text/xml"},[xml]]                
+     end
+
+    #Errorhandling
+
+#read the file
+    begin
+        relaxng_doc = XML::Document.file('../../interface/user/login/request.rng')
+        relaxng_sch = XML::RelaxNG.document(relaxng_doc)
+        #validate relax ng    
+            begin 
+                doc.validate_relaxng(relaxng_sch)
+            rescue Exception => e
+                 xml = "<error no='2'>XML Validation ERROR: #{e.message}</error>"
+                return [200,{"Content-Type" => "text/xml"},[xml]]                
+            end
+
+    rescue
+        xml = "<error no='3'>Couldn't open relaxng file. Check permissions or path</error>"
+        return [200,{"Content-Type" => "text/xml"},[xml]]
+    end
+#kill the server from outside
+c=req.query_string()
+if(c=="die")
+abort
+end
+
+    username = doc.find("/gts/username").first.content
+    password = Digest::SHA1.hexdigest(doc.find("/gts/password").first.content)
+    puts username
+    puts password
+
+    #at request check if user is logged in
+    #login or update
+    end
+    def login(username, key, register)
+        
+        sql = "insert into geologgedin (username,logginschlussel) values (?,?);"
+        begin
+           st = $dbh.prepare(sql)
+           st.execute(username, key)
+           xml = "<gts query='user/login'><username>#{username}</username><key>#{key}</key></gts>"
+           return [200,{"Content-Type" => "text/xml"},[xml]]  
+       rescue Exception => e
+           xml = "<error no='6'>DB Error: #{e.message}.</error>"
+           return [200,{"Content-Type" => "text/xml"},[xml]]  
+        end
+    end
+end

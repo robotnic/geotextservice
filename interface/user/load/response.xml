@@ -1,6 +1,6 @@
 <gts query="user/load">
-<user username="elfriede" timestamp="2010-10-03 20:35:37"/>
-<user username="franzi"  timestamp="2010-10-03 22:39:17"/>
-<user username="seppi"  timestamp="2010-10-03 20:30:07"/>
-<user username="maria"  timestamp="2010-02-07 4:35:37"/>
+<user username="elfriede" timestamp='2010-10-03T20:35:37'/>
+<user username="franzi"  timestamp='2010-10-03T20:35:37'/>
+<user username="seppi"  timestamp='2010-10-03T20:35:37'/>
+<user username="maria"  timestamp='2010-10-03T20:35:37'/>
 </gts>
