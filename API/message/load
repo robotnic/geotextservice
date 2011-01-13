@@ -36,7 +36,7 @@ end
             xml = "<gts  query='message/load[#{c}]' >";
 
             while row = st.fetch do
-                xml += "<content lat='#{row[1]}' lon='#{row[2]}' user='#{row[5]}' id='#{row[0]}' timestamp='#{row[4]}'>";
+                xml += "<content lat='#{row[2]}' lon='#{row[1]}' user='' id='#{row[0]}' timestamp='#{row[4]}'>";
                 xml += row[3];
                 xml += "</content>";
 
