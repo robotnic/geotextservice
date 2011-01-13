@@ -77,8 +77,6 @@ def getResponse(relaxDocument, requestUrl, erroranzahl, correctanzahl)
 		if(response != "")
 			puts "response " , response
 		end
-		
-	
 	else
 		# alle Dateien aus Directory
 		d = Dir.new("errors")
@@ -102,7 +100,7 @@ def getResponse(relaxDocument, requestUrl, erroranzahl, correctanzahl)
 					end
 					response = response.body
 					puts "Response:"
-					puts response.body
+					puts response
 
 					#####################
 					##VALIDATE RELAX NG##
