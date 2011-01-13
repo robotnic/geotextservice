@@ -6,7 +6,7 @@
 				<attribute name='query'>
 					<data type='string' />
 				</attribute>
-				<element name='success>
+				<element name='success'>
                     <attribute name="username">
                     <data type='string'>
                             <param name='maxLength'>
