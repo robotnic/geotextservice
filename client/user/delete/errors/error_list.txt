@@ -1,0 +1,17 @@
+DELETE REQUEST ERROR LIST
+
+Delete
+<gts key='EF988339EED5598DE8888776222EEAAA'>
+<delete id='123'/>
+<delete id='124'/>
+</gts>
+
+01 Key mit Sonderzeichen versehen
+02 kein content dabei
+03 gts nicht geschlossen/ fehlen
+04 delete id falsch
+05 delete id falsch geschrieben
+06 delete id tag nicht geschlossen
+07 gts Tag nicht geschlossen
+Correct01: mit mehreren ids zum löschen
+Correct 02: eine id ist zu löschen
