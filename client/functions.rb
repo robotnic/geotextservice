@@ -33,7 +33,7 @@ def getResponse(relaxDocument, requestUrl, erroranzahl, correctanzahl)
 	if(send_all == false)
 			x = type.to_s() + id.to_s()+".xml"
 		begin
-			xml = IO.read("errors/"+x)
+			xml = IO.read("error/"+x)
 		rescue
 			puts "fehler beim lesen von datei " + type.to_s() + id.to_s() + ".xml"
 			exit
@@ -89,7 +89,7 @@ def getResponse(relaxDocument, requestUrl, erroranzahl, correctanzahl)
 			|x|
 			if x.match('.xml')
 				begin
-					xml = IO.read('errors/'+x)
+					xml = IO.read('error/'+x)
 
 					request = Net::HTTP::Post.new(url.path)
 
