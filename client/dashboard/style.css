@@ -1,0 +1,51 @@
+body {
+	background-color: #424242;
+	color: #fafafa;
+	font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+h1 {
+	color: #FF9900;
+	font-family: 'Raleway', Arial, serif;
+	text-transform: uppercase;
+}
+h2 {
+	color: #3299BB;
+	font-family: 'Raleway', Arial, serif;
+	text-transform: uppercase;
+	font-size: 1.1em;
+	padding-top: 0px;
+	margin-top: -12px;
+	margin-left: -12px;
+	padding-left: 12px;
+	background-color: #555;
+	display: block;
+}
+
+
+
+#sidebar {
+	width: 250px;
+	background-color: #E9E9E9;
+	color: #424242;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	padding: 12px;
+	float: left;
+	
+}
+#sidebar input {
+	margin-bottom: 6px;
+	width: 100%;
+	text-align: left;
+}
+#results {
+	padding: 12px;
+	border-left: 1px solid #FF9900;
+	float: left;
+	margin-left: 12px;
+	width: 60%;
+	min-height: 400px;
+
+}

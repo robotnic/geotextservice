@@ -31,8 +31,9 @@ def getResponse(relaxDocument, requestUrl, erroranzahl, correctanzahl)
 	url = URI.parse(requestUrl)
 
 	if(send_all == false)
+			x = type.to_s() + id.to_s()+".xml"
 		begin
-			xml = IO.read(type.to_s() + id.to_s() + ".xml")
+			xml = IO.read("errors/"+x)
 		rescue
 			puts "fehler beim lesen von datei " + type.to_s() + id.to_s() + ".xml"
 			exit
@@ -41,6 +42,7 @@ def getResponse(relaxDocument, requestUrl, erroranzahl, correctanzahl)
 		request = Net::HTTP::Post.new(url.path)
 
 		request.body = xml
+		puts x
 		puts xml , "<br/>"
 
 		begin
@@ -65,9 +67,11 @@ def getResponse(relaxDocument, requestUrl, erroranzahl, correctanzahl)
 		begin
 		  instance.validate_relaxng(relaxng_schema)
 		rescue Exception => e
+		 puts "<br/><div class='error'>"
 		  puts e.message
+		 puts "</div>"
 		else
-		  puts "<br/><b>RNG:</b> ok"
+		  puts "<br/><div class='ok'>RNG: ok</div>"
 		end
 
 		# für response
@@ -100,7 +104,7 @@ def getResponse(relaxDocument, requestUrl, erroranzahl, correctanzahl)
 					end
 					response = response.body
 					puts "Response:"
-					puts response.body
+					puts response
 
 					#####################
 					##VALIDATE RELAX NG##
@@ -112,9 +116,11 @@ def getResponse(relaxDocument, requestUrl, erroranzahl, correctanzahl)
 					begin
 						instance.validate_relaxng(relaxng_schema)
 					rescue Exception => e
+						puts "<div class='error'>"
 						puts e.message
+						puts "</div>"
 					else
-						puts "<b>RNG:</b> ok"
+						puts "<div class='ok'><b>RNG:</b> ok</div>"
 					end
 
 					# fuer response
