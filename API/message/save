@@ -14,7 +14,7 @@ class MessageSave
 
   
     def call(env)
-
+$dbh.ping()
 		req= Rack::Request.new(env);
 
 		#Errorhandling
