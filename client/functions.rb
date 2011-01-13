@@ -83,7 +83,7 @@ def getResponse(relaxDocument, requestUrl, erroranzahl, correctanzahl)
 		end
 	else
 		# alle Dateien aus Directory
-		d = Dir.new("errors")
+		d = Dir.new("error")
 		# loop durch alle files / Check auf .xml
 		d.each  {
 			|x|
