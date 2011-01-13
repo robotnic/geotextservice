@@ -27,13 +27,19 @@ var paths = new Array();
 
 function doSave() {
 	//add save paths
-	paths = [
-			"save.cgi?type=error&id=01","save.cgi?type=error&id=02","save.cgi?type=error&id=03",
-			"save.cgi?type=error&id=04","save.cgi?type=error&id=05","save.cgi?type=error&id=06",
-			"save.cgi?type=error&id=07","save.cgi?type=error&id=08","save.cgi?type=error&id=09",
-			"save.cgi?type=error&id=10","save.cgi?type=error&id=11","save.cgi?type=error&id=12",
-			"save.cgi?type=correct&id=01","save.cgi?type=correct&id=02","save.cgi?type=correct&id=03"
-			]
+	for (i=1;i<13;i++) {
+		path = "save.cgi?type=error&id="+i;
+		paths.push(path);
+				// "save.cgi?type=error&id=01","save.cgi?type=error&id=02","save.cgi?type=error&id=03",
+				// "save.cgi?type=error&id=04","save.cgi?type=error&id=05","save.cgi?type=error&id=06",
+				// "save.cgi?type=error&id=07","save.cgi?type=error&id=08","save.cgi?type=error&id=09",
+				// "save.cgi?type=error&id=10","save.cgi?type=error&id=11","save.cgi?type=error&id=12",
+				// "save.cgi?type=correct&id=01","save.cgi?type=correct&id=02","save.cgi?type=correct&id=03"
+	}
+	for (i=1;i<4;i++) {
+		path = "save.cgi?type=correct&id="+i;
+		paths.push(path);
+	}
 }
 
 
