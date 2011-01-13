@@ -2,24 +2,27 @@
 	<start>
 		<choice>
 			<element name='gts'>
+
 				<attribute name='query'>
 					<data type='string' />
 				</attribute>
-				<element name='username'>
-					<data type='string'>
-						<param name='maxLength'>
-							50
-						</param>
-					</data>						
-				</element>
-				<element name='key'>
-					<data type='string'>
-						<param name='maxLength'>
-							40
-						</param>
-					</data>	
-				</element>
-			</element>
+				<element name='success'>
+                    <attribute name="username">
+                    <data type='string'>
+                            <param name='maxLength'>
+                                80
+                            </param>
+                        </data>	
+                    </attribute>
+                    <attribute name="key">
+                    <data type='string'>
+                            <param name='maxLength'>
+                                40
+                            </param>
+                        </data>	
+                    </attribute>
+				</element>			                
+            </element>
 			<element name='error'>
 				<attribute name='no'>
 					<data type='integer' />

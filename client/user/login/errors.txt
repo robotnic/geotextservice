@@ -1,8 +1,9 @@
 01 Username hat mehr als 80 Zeichen
-02 keine attribute/nur ein attribut
+02 keine attribute
 03 kein content dabei / leeres gts
 04 sonderzeichen im text
 05 groß/kleinschreibung der attribute
 06 tag nicht geschlossen
 07 kein gts tag
-08 starttag (gts) 
+08 starttag (gts)
+09 nur ein Attribute belegt
