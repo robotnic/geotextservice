@@ -8,11 +8,13 @@ require 'digest/sha1'
 require '../functions/uuid.rb'
 
 XML::Error.set_handler(&XML::Error::QUIET_HANDLER)
-$dbh = dbconnect
 
+    $dbh=dbconnect
 class UserRegister
     def call(env)
-  
+
+    $dbh.ping()
+
     req = Rack::Request.new(env)
 
 #kill the server from outside

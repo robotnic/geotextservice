@@ -1,4 +1,3 @@
 <gts query="user/login">
-<username>franzi</username>
-<key>1324FEEF34234FE343434FEFE</key>
+    <success username="franzi" key="1324FEEF34234FE343434FEFE" />
 </gts>
