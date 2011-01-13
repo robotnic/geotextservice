@@ -14,7 +14,7 @@ class MessageSave
 
   
     def call(env)
-$dbh.ping()
+
 		req= Rack::Request.new(env);
 
 		#Errorhandling
@@ -50,11 +50,10 @@ $dbh.ping()
 		if(c=="die")
 		abort
 		end
-	
-    xmlresponse = "<gts query='message/save'>"
-    
+		 
+		key=doc.root.attributes.get_attribute("key").value;
 
-      key=doc.root.attributes.get_attribute("key").value;
+    xmlresponse = "<gts query='message/save'>"
 
     doc.find("/gts/content").each {|node| 
       lon=node.attributes.get_attribute("lon").value; 
@@ -103,12 +102,36 @@ $dbh.ping()
   def writetodb(lat,lon,message,key,id=nil)   
 
       if id.nil?
-        sql = "insert into geopoints(lat,lon,message) values (?,?,?);"
+        
+        sql_getuser = "select username from geologgedin where logginschlussel =?;"
+        
+        st=$dbh.prepare(sql_getuser);
+        st.execute(key);
+        
+        if row
+          
+          while row = st.fetch do
+          
+          username = row[0];
+
+        end
+        
+        else
+          
+          xml = "<error no='666'>U r not loged in</error>"
+          return [501,{"Content-Type" => "text/xml"},[xml]]
+          
+          
+        end
+        
+        
+        
+        sql = "insert into geopoints(lat,lon,message,username) values (?,?,?,?);"
     
         st=$dbh.prepare(sql);
         
         #sql2 = "select timestamp, id from geopoints where id = @@IDENTITY"
-        st.execute(lat,lon,message);
+        st.execute(lat,lon,message,username);
         
         newid = $dbh.insert_id;
         sql2 = "select `time_stamp` from geopoints where id = ?"
@@ -121,29 +144,42 @@ $dbh.ping()
         
         end
         
-        sql3 = "select username from geologgedin where logginschlussel =?;"
-        
-        st=$dbh.prepare(sql3);
-        st.execute(key);
-        
-          while row = st.fetch do
-          
-          username = row[0];
-        
-        end
-        
+               
         returnary = [newid, timestamp, username]
         
         
 
       else
-        sql = "update geopoints set lat=?,lon=?,message=? where id =?;"
+        
+        sql_getuser = "select username from geologgedin where logginschlussel=?;"
+        
+        st=$dbh.prepare(sql_getuser);
+        st.execute(key);
+        
+       if row
+          
+          while row = st.fetch do
+          
+          username = row[0];
+
+        end
+        
+        else
+          
+          xml = "<error no='666'>U r not loged in</error>"
+          return [501,{"Content-Type" => "text/xml"},[xml]]
+          
+          
+        end
+        
+        
+        sql = "update geopoints set lat=?,lon=?,message=?,username=? where id =?;"
         
         st=$dbh.prepare(sql);
                 
         
                 
-        st.execute(lat,lon,message,id);
+        st.execute(lat,lon,message,username,id);
         
         sql2 = "select `time_stamp` from geopoints where id =?;"
         
@@ -155,16 +191,7 @@ $dbh.ping()
 
         end
         
-        sql3 = "select username from geologgedin where logginschlussel=?;"
         
-        st=$dbh.prepare(sql3);
-        st.execute(key);
-        
-          while row = st.fetch do
-          
-          username = row[0];
-        
-        end
         
         returnary = [id, timestamp, username]
       end
