@@ -23,21 +23,29 @@ $(document).ready(function() {
 
 });
 
+var paths = new Array();
+
+function doSave() {
+	//add save paths
+	paths = [
+			"save.cgi?type=error&id=01","save.cgi?type=error&id=02","save.cgi?type=error&id=03",
+			"save.cgi?type=error&id=04","save.cgi?type=error&id=05","save.cgi?type=error&id=06",
+			"save.cgi?type=error&id=07","save.cgi?type=error&id=08","save.cgi?type=error&id=09",
+			"save.cgi?type=error&id=10","save.cgi?type=error&id=11","save.cgi?type=error&id=12",
+			"save.cgi?type=correct&id=01","save.cgi?type=correct&id=02","save.cgi?type=correct&id=03"
+			]
+}
+
 
 function doAll() {
-
-	var paths = new Array(
-						"save.cgi?type=error&id=01"
-						
-						);
-	
+	doSave();
 	for(i=0;i<paths.length;i++) {
-		doAjax(paths[i]);
+		doAjax(paths[i],i);
 	}
 
 }
 
-function doAjax(script) {
+function doAjax(script,id) {
 	//erstellen des requests
 	var req = null;
 
@@ -74,10 +82,16 @@ function doAjax(script) {
 					alert("Fehler:"+req.status); 
 				}else{    
 					//schreibe die antwort in den div container mit der class result
-					var newRes = document.createElement("div");
+/*					var newRes = document.createElement("div");
 					$(newRes).addClass("response");
 					$("#results").append($(newRes));
 					$(".result").html(req.responseText);
+*/					
+					var newRes = document.createElement("div");
+					$(newRes).addClass("response");
+					$(newRes).attr("id", id);
+					$("#results").append($(newRes));
+					$("#"+id).html(req.responseText);
 				}
 				break;
 			default:
