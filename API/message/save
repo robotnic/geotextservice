@@ -1,7 +1,7 @@
 #! /usr/bin/ruby
 
 require 'rubygems'
-require 'connect.rb'
+require '../functions/connect.rb'
 require 'xml'
 require 'rack'
 
@@ -46,17 +46,16 @@ class MessageSave
 		end
 				
 		#kill the server from outside
-		#c=req.query_string()
-		#if(c=="die")
-		#abort
-		#end
+		c=req.query_string()
+		if(c=="die")
+		abort
+		end
 	
     xmlresponse = "<gts query='message/save'>"
     
-    
-      key=doc.root.attributes.get_attribut("key").value;
-    puts YAML::dump(key)
-        
+
+      key=doc.root.attributes.get_attribute("key").value;
+
     doc.find("/gts/content").each {|node| 
       lon=node.attributes.get_attribute("lon").value; 
       lat=node.attributes.get_attribute("lat").value;
@@ -77,9 +76,9 @@ class MessageSave
      
      
      if id==nil
-       xmlresponse = xmlresponse+"<content lat='#{lat}' lon='#{lon}' id='#{returnary[0]}' user=''#{returnary[2]}' timestamp='#{returnary[1]}'>" 
+       xmlresponse = xmlresponse+"<content lat='#{lat}' lon='#{lon}' id='#{returnary[0]}' user='#{returnary[2]}' timestamp='#{returnary[1]}'>" 
      else
-       xmlresponse = xmlresponse+"<content lat='#{lat}' lon='#{lon}' id='#{id}' user=''#{returnary[2]}' timestamp='#{returnary[1]}'>" 
+       xmlresponse = xmlresponse+"<content lat='#{lat}' lon='#{lon}' id='#{id}' user='#{returnary[2]}' timestamp='#{returnary[1]}'>" 
      end
      
      xmlresponse = xmlresponse+content+"</content>"
@@ -89,8 +88,6 @@ class MessageSave
       xmlresponse = xmlresponse+"</gts>"
       
       puts YAML::dump(xmlresponse)
-
-      
       
       return [200,{"Content-Type" => "text/xml"},[xmlresponse]]
 	end
@@ -114,20 +111,20 @@ class MessageSave
         st.execute(lat,lon,message);
         
         newid = $dbh.insert_id;
-        sql2 = "select `time_stamp` from geopoints where id = #{newid}"
+        sql2 = "select `time_stamp` from geopoints where id = ?"
                 
         st=$dbh.prepare(sql2);
-        st.execute();
+        st.execute(id);
         while row = st.fetch do
           
           timestamp = row[0];
         
         end
         
-        sql3 = "select username from geologgedin where logginschlussel = #{key}"
+        sql3 = "select username from geologgedin where logginschlussel =?;"
         
         st=$dbh.prepare(sql3);
-        st.execute();
+        st.execute(key);
         
           while row = st.fetch do
           
@@ -148,20 +145,20 @@ class MessageSave
                 
         st.execute(lat,lon,message,id);
         
-        sql2 = "select `time_stamp` from geopoints where id = #{id}"
+        sql2 = "select `time_stamp` from geopoints where id =?;"
         
         st=$dbh.prepare(sql2);
-        st.execute();
+        st.execute(id);
         while row = st.fetch do
           
           timestamp = row[0];
 
         end
         
-        sql3 = "select username from geologgedin where logginschlussel = #{key}"
+        sql3 = "select username from geologgedin where logginschlussel=?;"
         
         st=$dbh.prepare(sql3);
-        st.execute();
+        st.execute(key);
         
           while row = st.fetch do
           
