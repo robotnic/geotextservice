@@ -27,14 +27,9 @@ var paths = new Array();
 
 function doSave() {
 	//add save paths
-	for (i=1;i<13;i++) {
+	for (i=1;i<16;i++) {
 		path = "save.cgi?type=error&id="+i;
 		paths.push(path);
-				// "save.cgi?type=error&id=01","save.cgi?type=error&id=02","save.cgi?type=error&id=03",
-				// "save.cgi?type=error&id=04","save.cgi?type=error&id=05","save.cgi?type=error&id=06",
-				// "save.cgi?type=error&id=07","save.cgi?type=error&id=08","save.cgi?type=error&id=09",
-				// "save.cgi?type=error&id=10","save.cgi?type=error&id=11","save.cgi?type=error&id=12",
-				// "save.cgi?type=correct&id=01","save.cgi?type=correct&id=02","save.cgi?type=correct&id=03"
 	}
 	for (i=1;i<4;i++) {
 		path = "save.cgi?type=correct&id="+i;
@@ -55,7 +50,7 @@ function doAjax(script,id) {
 	//erstellen des requests
 	var req = null;
 
-	var path = "http://vs099.virtual.fhstp.ac.at/~dm101513/geotextservice/client/message/save/";
+	var path = "http://vs099.virtual.fhstp.ac.at/~dm101513/geotextservice/client/message/save/error";
 	
 	try{
 		req = new XMLHttpRequest();
