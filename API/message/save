@@ -14,16 +14,17 @@ class MessageSave
 
   
     def call(env)
-
-		req= Rack::Request.new(env);
+        
+        $dbh.ping()
+		
+        req= Rack::Request.new(env);
 
 		#Errorhandling
     
 		begin
-			doc = XML::Document.string(req.body.read);
-			
+			doc = XML::Document.string(req.body.read);			
 		rescue Exception => e
-			xml = "<error no='1'>XML ERROR: #{e.message}</error>"
+			xml = "<error no='1'>XML ERROR while calling  message/save: #{e.message}</error>"
 			return [501,{"Content-Type" => "text/xml"},[xml]] 
 		end
 		
@@ -50,8 +51,33 @@ class MessageSave
 		if(c=="die")
 		abort
 		end
-		 
+    	#loggedin key
 		key=doc.root.attributes.get_attribute("key").value;
+
+           sql_getuser = "select username from geologgedin where logginschlussel =?;"
+                
+           st=$dbh.prepare(sql_getuser);
+           st.execute(key);
+            
+            if $dbh.affected_rows > 0
+              begin
+                st.fetch do |row|
+                username = row[0]
+                end
+              ensure
+                puts YAML::dump(row)
+                puts row
+                puts row[0]
+              
+              end
+            else
+              
+              xml = "<error no='666'>U r not loged in</error>"
+              return [501,{"Content-Type" => "text/xml"},[xml]]
+              
+              
+            end
+          
 
     xmlresponse = "<gts query='message/save'>"
 
@@ -68,16 +94,17 @@ class MessageSave
       begin                                        
         content = node.first.content;
       rescue
-        return
+        xml = "<error='123'>u fail</error>"
+        return [500,{"Content-Type" => "text/xml"},[xml]] 
       end
     
-     returnary = writetodb(lat, lon, content,key,id);
+     returnary = writetodb(lat, lon, content, username, id);
      
      
      if id==nil
-       xmlresponse = xmlresponse+"<content lat='#{lat}' lon='#{lon}' id='#{returnary[0]}' user='#{returnary[2]}' timestamp='#{returnary[1]}'>" 
+       xmlresponse = xmlresponse+"<content lat='#{lat}' lon='#{lon}' id='#{returnary[0]}' user='#{username}' timestamp='#{returnary[1]}'>" 
      else
-       xmlresponse = xmlresponse+"<content lat='#{lat}' lon='#{lon}' id='#{id}' user='#{returnary[2]}' timestamp='#{returnary[1]}'>" 
+       xmlresponse = xmlresponse+"<content lat='#{lat}' lon='#{lon}' id='#{id}' user='#{username}' timestamp='#{returnary[1]}'>" 
      end
      
      xmlresponse = xmlresponse+content+"</content>"
@@ -99,32 +126,9 @@ class MessageSave
   
   
   
-  def writetodb(lat,lon,message,key,id=nil)   
+  def writetodb(lat,lon,message,username,id=nil)   
 
       if id.nil?
-        
-        sql_getuser = "select username from geologgedin where logginschlussel =?;"
-        
-        st=$dbh.prepare(sql_getuser);
-        st.execute(key);
-        
-        if row
-          
-          while row = st.fetch do
-          
-          username = row[0];
-
-        end
-        
-        else
-          
-          xml = "<error no='666'>U r not loged in</error>"
-          return [501,{"Content-Type" => "text/xml"},[xml]]
-          
-          
-        end
-        
-        
         
         sql = "insert into geopoints(lat,lon,message,username) values (?,?,?,?);"
     
@@ -138,6 +142,7 @@ class MessageSave
                 
         st=$dbh.prepare(sql2);
         st.execute(id);
+
         while row = st.fetch do
           
           timestamp = row[0];
@@ -145,39 +150,14 @@ class MessageSave
         end
         
                
-        returnary = [newid, timestamp, username]
-        
-        
+        returnary = [newid, timestamp]
+                
 
       else
-        
-        sql_getuser = "select username from geologgedin where logginschlussel=?;"
-        
-        st=$dbh.prepare(sql_getuser);
-        st.execute(key);
-        
-       if row
-          
-          while row = st.fetch do
-          
-          username = row[0];
-
-        end
-        
-        else
-          
-          xml = "<error no='666'>U r not loged in</error>"
-          return [501,{"Content-Type" => "text/xml"},[xml]]
-          
-          
-        end
-        
         
         sql = "update geopoints set lat=?,lon=?,message=?,username=? where id =?;"
         
         st=$dbh.prepare(sql);
-                
-        
                 
         st.execute(lat,lon,message,username,id);
         
@@ -193,7 +173,7 @@ class MessageSave
         
         
         
-        returnary = [id, timestamp, username]
+        returnary = [id, timestamp]
       end
       return(returnary);
       

@@ -10,14 +10,18 @@ require 'xml'
 class MessageLoad
     def call(env)
         req = Rack::Request.new(env)
-
+        
+        $dbh.ping()
+        
         c=req.query_string();
 
         if(c=="die")
             abort
         elsif c=="bbox"
          #   bboxarray = c.split(/([(0-9)(\.?(0-9)*)?],?[(0-9)(\.?(0-9)*)?]*)/)
-puts "query: ",c
+
+         puts YAML::dump(c)
+            puts "query: ",c
 
 bboxarray = c.split(",")
 
