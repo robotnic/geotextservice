@@ -5,53 +5,57 @@ require '../functions/connect.rb'
 require 'rack'
 require 'xml'
 
- $dbh=dbconnect
+# $dbh=dbconnect
 
 class MessageLoad
     def call(env)
-        req = Rack::Request.new(env)
+#        req = Rack::Request.new(env)
         
-        $dbh.ping()
-        
+#        $dbh.ping()
+=begin
         c=req.query_string();
 
         if(c=="die")
             abort
         elsif c=="bbox"
-         #   bboxarray = c.split(/([(0-9)(\.?(0-9)*)?],?[(0-9)(\.?(0-9)*)?]*)/)
+            #   bboxarray = c.split(/([(0-9)(\.?(0-9)*)?],?[(0-9)(\.?(0-9)*)?]*)/)
 
-         puts YAML::dump(c)
+            puts YAML::dump(c)
             puts "query: ",c
 
-bboxarray = c.split(",")
+            bboxarray = c.split(",")
 
-puts bboxarray[0]
-puts bboxarray[1]
-puts bboxarray[2]
-puts bboxarray[3]
+            puts bboxarray[0]
+            puts bboxarray[1]
+            puts bboxarray[2]
+            puts bboxarray[3]
 
-end
-    
-    sql="select * from geopoints";
+        end
+=end
+=begin
+        begin
+    sql="SELECT * FROM geopoints";
 
     st=$dbh.prepare(sql);
 
     st.execute();
-            xml = "<gts  query='message/load[#{c}]' >";
 
-            while row = st.fetch do
+            xml = "<gts  query='message/load[#{c}]' >";
+            st.fetch do |row|
                 xml += "<content lat='#{row[2]}' lon='#{row[1]}' user='' id='#{row[0]}' timestamp='#{row[4]}'>";
                 xml += row[3];
                 xml += "</content>";
-
             end
-            xml += '</gts>';
-               [200, {"Content-Type" => "text/xml"}, [xml]]
-    end
-    def loadfromdb()
+           xml += '</gts>';
+            return  [200, {"Content-Type" => "text/xml"}, [xml]]
 
+    rescue Exception => e
+        xml = "<error no='6'>DB Error: #{e.message}.</error>"
+        puts xml
+#        return[500,{"Content-Type" => "text/xml"},[xml]]
+    end
+=end        
     end
 end
 
-# Deploy
 Rack::Handler::FastCGI.run MessageLoad.new

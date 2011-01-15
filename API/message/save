@@ -18,6 +18,13 @@ class MessageSave
         $dbh.ping()
 		
         req= Rack::Request.new(env);
+				
+		#kill the server from outside
+		c=req.query_string()
+		if(c=="die")
+            puts "FAAAAAAAAAAAATHER"
+    		abort
+		end
 
 		#Errorhandling
     
@@ -45,12 +52,6 @@ class MessageSave
 			xml = "<error no='5'>Couldn't open relaxng file. Check permissions or path</error>"
 			return [501,{"Content-Type" => "text/xml"},[xml]]
 		end
-				
-		#kill the server from outside
-		c=req.query_string()
-		if(c=="die")
-		abort
-		end
     	#loggedin key
 		key=doc.root.attributes.get_attribute("key").value;
 
@@ -60,16 +61,11 @@ class MessageSave
            st.execute(key);
             
             if $dbh.affected_rows > 0
-              begin
                 st.fetch do |row|
-                username = row[0]
+
+                    YAML::dump(row)
+                    username = row[0]
                 end
-              ensure
-                puts YAML::dump(row)
-                puts row
-                puts row[0]
-              
-              end
             else
               
               xml = "<error no='666'>U r not loged in</error>"
@@ -127,7 +123,7 @@ class MessageSave
   
   
   def writetodb(lat,lon,message,username,id=nil)   
-
+      
       if id.nil?
         
         sql = "insert into geopoints(lat,lon,message,username) values (?,?,?,?);"
