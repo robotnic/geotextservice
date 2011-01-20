@@ -120,8 +120,7 @@ var map=null;
  
 var key=null;
 //var server="proxy.php?request=";
-//var server="/~zwischenbrugger/project/geotextservice/API";
-var server="../API";
+var server="/~dm101507/geotextservice/API";
  
 function init(){
 	map=new mr.Map(document.getElementById("map"));  //dom element
@@ -141,7 +140,7 @@ function loadit(){
 }
 
 function load(){
-        var xmlhttp=new XMLHttpRequest();
+  var xmlhttp=new XMLHttpRequest();
 	var boundsParam="[bbox="+map.bounds().sw().lat()+","+map.bounds().sw().lng()+","+map.bounds().ne().lat()+","+map.bounds().ne().lng()+"]";
 	var userParam="";
 	if(document.getElementById("userfield").value){
@@ -151,7 +150,7 @@ function load(){
 	if(document.getElementById("searchfield").value){
 		var searchParam="[search="+document.getElementById("searchfield").value+"]";
 	}
-//      xmlhttp.open("GET","http://vs099.virtual.fhstp.ac.at/~zwischenbrugger/project/geotextservice/API/message/load",true);
+//      xmlhttp.open("GET","http://vs099.virtual.fhstp.ac.at/~dm101507/geotextservice/API/message/load",true);
 	var url=server+"/message/load?"+boundsParam+userParam+searchParam;
 	//alert(url);
         xmlhttp.open("GET",url,true);
@@ -268,7 +267,6 @@ Das Best wo gibt.
 <li><div>Routing</div></li>
 </ul>
 <div id="panel">
-
 <div id="search">
 <h4>Fulltext Search</h4>
 <input type="text" id="searchfield"/>
@@ -282,7 +280,6 @@ Das Best wo gibt.
 <textarea id="markertext">
 </textarea>
 <br/>
-
 <button onmousedown="save()">save</button>
 
 </div>
@@ -298,7 +295,6 @@ Das Best wo gibt.
 </tr>
 <tr>
 <td>password</td>
-
 <td><input type="text" id="password"/></td>
 </tr>
 <tr>
@@ -312,4 +308,3 @@ Das Best wo gibt.
 
 </body>
 </html>
-

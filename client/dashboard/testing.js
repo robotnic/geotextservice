@@ -23,21 +23,30 @@ $(document).ready(function() {
 
 });
 
+var paths = new Array();
+
+function doSave() {
+	//add save paths
+	for (i=1;i<16;i++) {
+		path = "save.cgi?type=error&id="+i;
+		paths.push(path);
+	}
+	for (i=1;i<4;i++) {
+		path = "save.cgi?type=correct&id="+i;
+		paths.push(path);
+	}
+}
+
 
 function doAll() {
-
-	var paths = new Array(
-						"save.cgi?type=error&id=01"
-						
-						);
-	
+	doSave();
 	for(i=0;i<paths.length;i++) {
-		doAjax(paths[i]);
+		doAjax(paths[i],i);
 	}
 
 }
 
-function doAjax(script) {
+function doAjax(script,id) {
 	//erstellen des requests
 	var req = null;
 
@@ -74,10 +83,18 @@ function doAjax(script) {
 					alert("Fehler:"+req.status); 
 				}else{    
 					//schreibe die antwort in den div container mit der class result
-					var newRes = document.createElement("div");
+
+/*					var newRes = document.createElement("div");
 					$(newRes).addClass("response");
 					$("#results").append($(newRes));
 					$(".result").html(req.responseText);
+*/					
+					var newRes = document.createElement("div");
+					$(newRes).addClass("response");
+					$(newRes).attr("id", id);
+					$("#results").append($(newRes));
+					$("#"+id).html(req.responseText);
+
 				}
 				break;
 			default:

@@ -1,0 +1,8 @@
+01 Kein Passwort angegeben
+02 Passwort mit Sonderzeichen
+03 Schließen des Passwort-Tags fehlt
+04 Ganzer Passwort-Tag fehlt
+05 Schließen des gts-Tags fehlt
+06 kein key angegeben
+07 kein gts tag
+ 

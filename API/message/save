@@ -1,28 +1,38 @@
 #! /usr/bin/ruby
 
 require 'rubygems'
-require 'connect.rb'
+require '../functions/connect.rb'
 require 'xml'
 require 'rack'
 
 $dbh=dbconnect   #hier eine global variable mit $
 
+XML::Error.set_handler(&XML::Error::QUIET_HANDLER)
 
 
 class MessageSave
 
   
     def call(env)
-
-		req= Rack::Request.new(env);
+        
+        $dbh.ping()
+		
+        req= Rack::Request.new(env);
+				
+		#kill the server from outside
+		c=req.query_string()
+		if(c=="die")
+            puts "FAAAAAAAAAAAATHER"
+    		abort
+		end
 
 		#Errorhandling
-		
+    
 		begin
-			doc = XML::Document.string(req.body.read);
+			doc = XML::Document.string(req.body.read);			
 		rescue Exception => e
-			xml = "<error no='1'>XML ERROR: #{e.message}</error>"
-			return [200,{"Content-Type" => "text/xml"},[xml]] 
+			xml = "<error no='1'>XML ERROR while calling  message/save: #{e.message}</error>"
+			return [501,{"Content-Type" => "text/xml"},[xml]] 
 		end
 		
 
@@ -35,27 +45,44 @@ class MessageSave
 					doc.validate_relaxng(relaxng_sch)
 				rescue Exception => e
 					xml = "<error no='7'>XML ERROR: #{e.message}</error>"
-					return [200,{"Content-Type" => "text/xml"},[xml]]                
+					return [501,{"Content-Type" => "text/xml"},[xml]]                
 				end
 
 		rescue
 			xml = "<error no='5'>Couldn't open relaxng file. Check permissions or path</error>"
-			return [200,{"Content-Type" => "text/xml"},[xml]]
+			return [501,{"Content-Type" => "text/xml"},[xml]]
 		end
-				
-		#kill the server from outside
-		c=req.query_string()
-		if(c=="die")
-		abort
-		end
-	
+    	#loggedin key
+		key=doc.root.attributes.get_attribute("key").value;
+
+           sql_getuser = "select username from geologgedin where logginschlussel =?;"
+                
+           st=$dbh.prepare(sql_getuser);
+           st.execute(key);
+            
+            if $dbh.affected_rows > 0
+                st.fetch do |row|
+
+                    YAML::dump(row)
+                    username = row[0]
+                end
+            else
+              
+              xml = "<error no='666'>U r not loged in</error>"
+              return [501,{"Content-Type" => "text/xml"},[xml]]
+              
+              
+            end
+          
+
+    xmlresponse = "<gts query='message/save'>"
 
     doc.find("/gts/content").each {|node| 
-      lon=node.attributes.get_attribute("lon"); 
-      lat=node.attributes.get_attribute("lat");
+      lon=node.attributes.get_attribute("lon").value; 
+      lat=node.attributes.get_attribute("lat").value;
       
       begin 
-        id = node.attributes.get_attribute("id");
+        id = node.attributes.get_attribute("id").value;
       rescue
         id = nil;
       end                
@@ -63,35 +90,100 @@ class MessageSave
       begin                                        
         content = node.first.content;
       rescue
-        return
+        xml = "<error='123'>u fail</error>"
+        return [500,{"Content-Type" => "text/xml"},[xml]] 
       end
     
-      writetodb(lat, lon, content,id);
+	begin                                        
+		username="lehrer"
+	     returnary = writetodb(lat, lon, content, username, id);
+	rescue Exception => e
+                        xml = "<error no='6'>DB Error: #{e.message}.</error>"
+                        return[500,{"Content-Type" => "text/xml"},[xml]]
+	end
+
+     
+     
+     if id==nil
+       xmlresponse = xmlresponse+"<content lat='#{lat}' lon='#{lon}' id='#{returnary[0]}' user='#{username}' timestamp='#{returnary[1]}'>" 
+     else
+       xmlresponse = xmlresponse+"<content lat='#{lat}' lon='#{lon}' id='#{id}' user='#{username}' timestamp='#{returnary[1]}'>" 
+     end
+     
+     xmlresponse = xmlresponse+content+"</content>"
+     
     };
+    
+      xmlresponse = xmlresponse+"</gts>"
+      
+      puts YAML::dump(xmlresponse)
+      
+      return [200,{"Content-Type" => "text/xml"},[xmlresponse]]
 	end
   
-  def writetodb(lat,lon,message,id=nil)
-    puts 
-   
-
+  
+  
+  
+  
+  
+  
+  
+  
+  def writetodb(lat,lon,message,username,id=nil)   
+      
       if id.nil?
-        sql = "insert into geopoints(lat,lon,message) values (?,?,?);"
+     	sql="INSERT INTO geopoints ( `wgs` ,`lat`,`lon`, `message`,`username`)VALUES(GeomFromText(?),?,?,?,?)";
+#                st.execute("POINT("+lat.to_s+" "+lon.to_s+")",content);   
+#        sql = "insert into geopoints(lat,lon,message,username) values (?,?,?,?);"
     
         st=$dbh.prepare(sql);
-    
-        st.execute(lat,lon,message);
-    
-      else
-        sql = "update geopoints set lat=?,lon=?,message=? where id =?;"
         
-        st=$dbh.prepare(sql);
+        #sql2 = "select timestamp, id from geopoints where id = @@IDENTITY"
+        st.execute("POINT("+lat.to_s+" "+lon.to_s+")",lat,lon,message,username);
         
+        newid = $dbh.insert_id;
+        sql2 = "select `time_stamp` from geopoints where id = ?"
                 
-        st.execute(lat,lon,message,id);
+        st=$dbh.prepare(sql2);
+        st.execute(id);
+
+        while row = st.fetch do
+          
+          timestamp = row[0];
+        
+        end
+        
+               
+        returnary = [newid, timestamp]
+                
+
+      else
+        
+        sql = "update geopoints set lat=?,lon=?,message=?,username=? where id =?;"
+        
+        st=$dbh.prepare(sql);
+                
+        st.execute(lat,lon,message,username,id);
+        
+        sql2 = "select `time_stamp` from geopoints where id =?;"
+        
+        st=$dbh.prepare(sql2);
+        st.execute(id);
+        while row = st.fetch do
+          
+          timestamp = row[0];
+
+        end
+        
+        
+        
+        returnary = [id, timestamp]
       end
+      return(returnary);
+      
   end
   
-  
+ 
 end
 
 Rack::Handler::FastCGI.run MessageSave.new

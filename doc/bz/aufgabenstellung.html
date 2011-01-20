@@ -1,0 +1,38 @@
+<html>
+<head>
+<title>bugs</title>
+</head>
+<body>
+<h1>Der Weg zum Glück</h1>
+
+<h4>Aufgabe</h4>
+Die definierte Schnittstelle ist zu implementieren. Zusätzlich muss jede Gruppe die API erweitern. Diese Erweiterung ist auch zu implementieren.
+<h4>Server Gruppe</h4>
+Für die Server Gruppe ist die Aufgabe recht einfach definiert. Die API ist zu implementieren. Wichtig ist aber auch, dass zumindest der "load" Teil 
+super schnell funktioniert. Die Schnittstelle muss für den "load" aufruf in max. 10 millisekunden ein Ergebnis liefern.
+<br/>
+<h4>Client Gruppe</h4>
+<p>
+Die Client Gruppe muss überprüfen on alles funktioniert.
+Weiters ist ein Performance Check zu machen - also wie lange dauert so ein Aufruf.
+</p>
+<h5>Vor der Inbetriebnahme</h5>
+Bevor das Service online geht, muss für die verschiedenen Betriebszustände ausgewertet werden wie schnell die einzelnen Aufrufe funktionieren.
+Dazu ist die Datenbank mit Usern und Messages zu befüllen. Die Ergebnisse sind graphisch darzustellen.
+Es entsteht also eine (logrithmische) Graphik mit 10,100,1000,10.000,100.000,1.000.000,10.000.0000,... messages +usern in der DB.
+<br/>
+Es soll dargestellt werden wie viele User/Messages mit einem Server verkraftbar sind. 
+<h5>Während dem Betrieb</h5>
+Auch wenn das Werkl in Betrieb ist, soll es überwacht werden. Dazu wird z.B. einmal pro Stunde ein checkdurchlauf gemacht. Wenn Fehler auftreten
+wenn es einen Alarm geben. Also z.B. user "ghggghghhhhhgghghghh7575575" anlegen, einlogen, Nachricht irgendwo in den Pazifik setzen, Nachricht lesen,
+ausloggen, user löschen. Die Zeiten für jeden Request sollen protokolliert werden. Um eventuelle DNS Verzögerungen nicht mitzumessen, ist es eventuell nötig den Durchlauf 2* zu machen.
+<h5>Projekt Planung</h5>
+Wie bereits in anderen Übungen sollte die Client Gruppe eine Projekt Planung mit der Punkteverteilung machen.
+
+
+
+
+
+
+</body>
+</html>
