@@ -53,6 +53,7 @@ h2 {
   border: 1px solid #CCCCCC;
   margin: 20px 0;
   background-color: #525252;
+  padding: 3px;
 }
 #results .response .ok {
   border: 2px solid green;

@@ -1,6 +1,6 @@
 
 
-var path = "http://vs099.virtual.fhstp.ac.at/~dm101504/geotextservice/client/message/save/";
+var path = "http://vs099.virtual.fhstp.ac.at/~dm101551/geotextservice/client/message/save/";
 
 $(document).ready(function() {
   var startTime = new Date().getMilliseconds();
