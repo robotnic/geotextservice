@@ -1,6 +1,6 @@
 
 
-var path = "http://vs099.virtual.fhstp.ac.at/~dm101504/geotextservice/client/message/save/";
+var path = "http://vs099.virtual.fhstp.ac.at/~dm101551/projekt/geotextservice/client/";
 
 $(document).ready(function() {
   var startTime = new Date().getMilliseconds();
@@ -54,11 +54,11 @@ function doMessageSave()
   // alle xmls für message/save registrieren
   xmllist = new Array();
   for (i=1;i<16;i++) {
-		var xml = "save.cgi?type=error&id="+i;
+		var xml = "message/save/save.cgi?type=error&id="+i;
 		xmllist.push(xml);
 	}
 	for (i=1;i<4;i++) {
-		var xml = "save.cgi?type=correct&id="+i;
+		var xml = "message/save/save.cgi?type=correct&id="+i;
 		xmllist.push(xml);
 	}
   
@@ -79,11 +79,32 @@ function doMessageLoad()
   // alle xmls für message/load registrieren
   xmllist = new Array();
   for (i=1;i<16;i++) {
-		var xml = "load.cgi?type=error&id="+i;
+		var xml = "message/load/load.cgi?type=error&id="+i;
 		xmllist.push(xml);
 	}
 	for (i=1;i<4;i++) {
-		var xml = "load.cgi?type=correct&id="+i;
+		var xml = "message/load/load.cgi?type=correct&id="+i;
+		xmllist.push(xml);
+	}
+  
+  
+  for(i=0;i<xmllist.length;i++) {
+		doAjax(xmllist[i],i);
+	}
+}
+
+function doUserLogin()
+{
+  clearResults();
+  
+  // alle xmls für user/save registrieren
+  xmllist = new Array();
+  for (i=1;i<10;i++) {
+		var xml = "user/login/login.cgi?type=error&id="+i;
+		xmllist.push(xml);
+	}
+	for (i=1;i<2;i++) {
+		var xml = "user/login/login.cgi?type=correct&id="+i;
 		xmllist.push(xml);
 	}
   
