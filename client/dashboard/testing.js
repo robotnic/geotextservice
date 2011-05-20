@@ -1,5 +1,7 @@
 
 
+var path = "http://vs099.virtual.fhstp.ac.at/~dm101507/geotextservice/client/message/save/";
+
 $(document).ready(function() {
   var startTime = new Date().getMilliseconds();
 
@@ -28,7 +30,7 @@ var paths = new Array();
 function doSave() {
 	//add save paths
 	for (i=1;i<16;i++) {
-		path = "save.cgi?type=error&id="+i;
+		 = "save.cgi?type=error&id="+i;
 		paths.push(path);
 	}
 	for (i=1;i<4;i++) {
@@ -38,19 +40,37 @@ function doSave() {
 }
 
 
-function doAll() {
-	doSave();
-	for(i=0;i<paths.length;i++) {
-		doAjax(paths[i],i);
-	}
+// function doAll() {
+	// for(i=0;i<paths.length;i++) {
+		// doAjax(paths[i],i);
+	// }
 
+// }
+
+function doMessageSave()
+{
+  // alle xmls für message/save registrieren
+  xmllist = array();
+  for (i=1;i<16;i++) {
+		var xml = "save.cgi?type=error&id="+i;
+		xmllist.push(xml);
+	}
+	for (i=1;i<4;i++) {
+		var xml = "save.cgi?type=correct&id="+i;
+		xmllist.push(xml);
+	}
+  
+  
+  for(i=0;i<xmllist.length;i++) {
+		doAjax(xmllist[i],i);
+	}
 }
 
 function doAjax(script,id) {
 	//erstellen des requests
 	var req = null;
 
-	var path = "http://vs099.virtual.fhstp.ac.at/~dm101513/geotextservice/client/message/save/";
+	
 	
 	try{
 		req = new XMLHttpRequest();
@@ -93,7 +113,7 @@ function doAjax(script,id) {
 					$(newRes).addClass("response");
 					$(newRes).attr("id", id);
 					$("#results").append($(newRes));
-					$("#"+id).html(req.responseText);
+					$("#"+id).html("<pre>" + req.responseText + "</pre>");
 
 				}
 				break;
