@@ -4,7 +4,7 @@ require 'rubygems'
 require '../functions/connect.rb'
 require 'xml'
 require 'rack'
-require 'logger'
+
 
 $dbh=dbconnect   #hier eine global variable mit $
 
@@ -60,24 +60,17 @@ class MessageSave
     #loggedin key
 		key=doc.root.attributes.get_attribute("key").value;
         #check ob user eingelogt ist
-       sql_getuser = "select username from geologgedin where logginschlussel ='?';"
+       sql_getuser = "select username from geologgedin where logginschlussel =?;"
             
        st=$dbh.prepare(sql_getuser);
        st.execute(key);
-       
+           
         if $dbh.affected_rows > 0
         #user ist eingelogt
-            st.fetch do |row|
+            while row = st.fetch do
                 $username = row[0]
-                
-               # logger.debug {@$username.inspect}
-                
-                # puts $username.inspect
-                # file = open('foo.log', File::WRONLY | File::APPEND | File::CREAT)
-                # logger = Logger.new(file)
-                # logger.error("asdfasdf")
-
             end #do end
+            
         else
      #user ist nicht eingelogt -> error   
           xml = "<error no='666'>U r not loged in</error>"
