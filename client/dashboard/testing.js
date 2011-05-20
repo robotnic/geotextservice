@@ -53,7 +53,7 @@ function doMessageSave()
   
   // alle xmls für message/save registrieren
   xmllist = new Array();
-  for (i=1;i<16;i++) {
+  for (i=1;i<15;i++) {
 		var xml = "message/save/save.cgi?type=error&id="+i;
 		xmllist.push(xml);
 	}
@@ -92,7 +92,6 @@ function doMessageLoad()
 
 function doMessageDelete()
 {
-return;
   clearResults();
   
   // alle xmls für message/load registrieren
