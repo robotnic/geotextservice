@@ -1,88 +1,34 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-    <head>
-        <title>Dashboard</title>
-        <script type="text/javascript">
-         <!--    
-             function doIt(pfad){
-             
-                 //erstellen des requests
-                 var req = null;
-
-                try{
-                    req = new XMLHttpRequest();
-                }
-                catch (ms){
-                    try{
-                        req = new ActiveXObject("Msxml2.XMLHTTP");
-                    } 
-                    catch (nonms){
-                        try{
-                            req = new ActiveXObject("Microsoft.XMLHTTP");
-                        } 
-                        catch (failed){
-                            req = null;
-                        }
-                    }  
-                }
-
-                if (req == null)
-                      alert("Error creating request object!");
-                  
-                  //anfrage erstellen (GET, url ist localhost,
-                  //request ist asynchron      
-                  req.open("GET", 'http://vs099.virtual.fhstp.ac.at/~dm101506/geotextservice/client/message/save/'+ pfad, true);
-
-                //Beim abschliessen des request wird diese Funktion ausgeführt
-                req.onreadystatechange = function(){            
-                    switch(req.readyState) {
-                            case 4:
-                            if(req.status!=200) {
-                                alert("Fehler:"+req.status); 
-                            }else{    
-                                //schreibe die antwort in den div container mit der id content 
-                                document.getElementById('ausgabe1').innerHTML = '<strong>'+ req.responseText +'</strong>';
-                            }
-                            break;
-                    
-                            default:
-                                return false;
-                            break;     
-                        }
-                    };
-  
-                  req.setRequestHeader("Content-Type",
-                                      "application/x-www-form-urlencoded");
-                req.send(null);
-            }
-         //-->
-        </script>
-    </head>
-    <body>
-        <div id="funktionsliste" style="width: 80%; height: 80%; border: dashed 1px;">
-          <table style="width:800px; font-family:Verdana, Geneva, sans-serif; font-size:11px">
-            <th height="58" style="font-weight:bold"><h2>Funktionsliste</h2></th>
-				<tr bgcolor="#D6D6D6">
-			<td width="145" height="24" align="center">Status</td><td width="148" align="center">Funktionsname</td><td width="135"></td><td width="352"></td>				</tr>
-      <tr>
-	<td width="145" height="36" align="center"><img src ="rot.png" width="19px" height="19px"></td><td width="148" align="center">Funktion 1</td><td width="135"><input type="button" onClick="doIt('save.cgi?type=error&id=01');" value="Script check!"/></td><td width="352" id="ausgabe1"></td>
-				</tr>
-                <tr>
-					<td width="145" height="36" align="center"><img src ="rot.png" width="19px" height="19px"></td><td width="148" align="center">Funktion 2</td><td width="135"><input type="button" onClick="doIt();" value="Script check!"/></td><td width="352" id="ausgabe2"></td>
-				</tr>
-                <tr>
-					<td width="145" height="36" align="center"><img src ="rot.png" width="19px" height="19px"></td><td width="148" align="center">Funktion 3</td><td width="135"><input type="button" onClick="doIt();" value="Script check!"/></td><td width="352" id="ausgabe3"></td>
-				</tr>
-                <tr>
-					<td width="145" height="36" align="center"><img src ="rot.png" width="19px" height="19px"></td><td width="148" align="center">Funktion 4</td><td width="135"><input type="button" onClick="doIt();" value="Script check!"/></td><td width="352" id="ausgabe4"></td>
-				</tr>
-                <tr>
-					<td width="145" height="36" align="center"><img src ="rot.png" width="19px" height="19px"></td><td width="148" align="center">Funktion 5</td><td width="135"><input type="button" onClick="doIt();" value="Script check!"/></td><td width="352" id="ausgabe5"></td>
-				</tr>
-                <tr>
-					<td width="145" height="36" align="center"><img src ="rot.png" width="19px" height="19px"></td><td width="148" align="center">Funktion 6</td><td width="135"><input type="button" onClick="doIt();" value="Script check!"/></td><td width="352" id="ausgabe6"></td>
-				</tr>
-                
-			</table>
-        </div>
-    </body>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Test Dashboard</title>
+	<link type="text/css" rel="stylesheet" href="style.css" />
+	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+	<script type="text/javascript" src="testing.js"></script>
+	<link href='http://fonts.googleapis.com/css?family=Raleway:100' rel='stylesheet' type='text/css'>
+	<script type="text/javascript" src="testing.js"></script>
+</head>
+<body> 
+	<h1>ultimative dashboard</h1>
+	
+	<div id="sidebar">
+    <h3>message</h3>
+    <input type="button" name="message_save" value="message_save" onClick="doMessageSave()"></input>
+    <h3>-----</h3>
+		<input type="button" name="all_tests" value="Alle Tests starten" onClick=""></input>
+		<input type="button" name="msg_tests" value="MSG-Tests starten"></input>
+		<input type="button" name="clear" value="Clear" onClick="clearResults()"></input>
+	</div>
+	
+	
+	<div id="results">
+		<h2>Ergebnisse</h2>
+		<div class="result">
+		
+		
+		</div>
+	</div>
+</body>
 </html>
