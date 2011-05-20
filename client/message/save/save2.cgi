@@ -6,8 +6,8 @@ require "uri"
 require "net/http"
 require 'xml'
 
-user = "Kerstin"
-pw = "1234"
+user = "testuser1"
+pw = "password"
 
 urlLogin = URI.parse('http://vs099.virtual.fhstp.ac.at/~dm101527/geotextservice/API/user/login')
 requestLogin = Net::HTTP::Post.new(urlLogin.path)

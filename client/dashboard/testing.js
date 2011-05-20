@@ -53,7 +53,7 @@ function doMessageSave()
   
   // alle xmls für message/save registrieren
   xmllist = new Array();
-  for (i=1;i<16;i++) {
+  for (i=1;i<15;i++) {
 		var xml = "message/save/save.cgi?type=error&id="+i;
 		xmllist.push(xml);
 	}
@@ -65,10 +65,7 @@ function doMessageSave()
   
   for(i=0;i<xmllist.length;i++) {
 		doAjax(xmllist[i],i);
-	}
-  
-
-  
+	}  
 }
 
 
@@ -93,6 +90,28 @@ function doMessageLoad()
 	}
 }
 
+function doMessageDelete()
+{
+  clearResults();
+  
+  // alle xmls für message/load registrieren
+  xmllist = new Array();
+  for (i=1;i<16;i++) {
+		var xml = "message/delete/delete.cgi?type=error&id="+i;
+		xmllist.push(xml);
+	}
+	for (i=1;i<4;i++) {
+		var xml = "message/delete/delete.cgi?type=correct&id="+i;
+		xmllist.push(xml);
+	}
+  
+  
+  for(i=0;i<xmllist.length;i++) {
+		doAjax(xmllist[i],i);
+	}
+}
+
+
 function doUserLogin()
 {
   clearResults();
@@ -114,6 +133,47 @@ function doUserLogin()
 	}
 }
 
+function doUserRegister()
+{
+  clearResults();
+  
+  // alle xmls für user/save registrieren
+  xmllist = new Array();
+  for (i=1;i<9;i++) {
+		var xml = "user/register/register.cgi?type=error&id="+i;
+		xmllist.push(xml);
+	}
+	for (i=1;i<2;i++) {
+		var xml = "user/register/register.cgi?type=correct&id="+i;
+		xmllist.push(xml);
+	}
+  
+  
+  for(i=0;i<xmllist.length;i++) {
+		doAjax(xmllist[i],i);
+	}
+}
+
+function doUserDelete()
+{
+  clearResults();
+  
+  // alle xmls für user/save registrieren
+  xmllist = new Array();
+  for (i=1;i<8;i++) {
+		var xml = "user/delete/delete.cgi?type=error&id="+i;
+		xmllist.push(xml);
+	}
+	for (i=1;i<3;i++) {
+		var xml = "user/delete/delete.cgi?type=correct&id="+i;
+		xmllist.push(xml);
+	}
+  
+  
+  for(i=0;i<xmllist.length;i++) {
+		doAjax(xmllist[i],i);
+	}
+}
 
 
 

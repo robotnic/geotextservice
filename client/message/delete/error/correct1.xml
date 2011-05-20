@@ -1,4 +1,4 @@
-<gts key='[key]'/>
-<delete id='1'/>
-<delete id='2'/>
+<gts key='[key]'>
+<delete id='[id1]'/>
+<delete id='[id2]'/>
 </gts>

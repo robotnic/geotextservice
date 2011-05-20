@@ -55,13 +55,14 @@ class MessageDelete
         #check if user is logged in
         sql_getuser = "select username from geologgedin where logginschlussel =?;"
             
-        st=$dbh.prepare(sql_getuser);
-        st.execute(key);
-       
+        st=$dbh.prepare(sql_getuser)
+        st.execute(key)
+        username = "" 
         if $dbh.affected_rows > 0
         #user ist eingelogt
             st.fetch do |row|
                 username = row[0]
+                $dbh.do("INSERT INTO debugtable (wert) VALUES ('problem? :7')")
             end
 
             st_delete=$dbh.prepare("DELETE FROM geopoints WHERE id=? and username=?")
