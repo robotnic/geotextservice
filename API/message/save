@@ -36,7 +36,7 @@ class MessageSave
 		end
 		
 
-		#read the file
+		#read the rng file
 		begin
 			relaxng_doc = XML::Document.file('../../interface/message/save/request.rng')
 			relaxng_sch = XML::RelaxNG.document(relaxng_doc)
@@ -54,60 +54,62 @@ class MessageSave
 		end
     	#loggedin key
 		key=doc.root.attributes.get_attribute("key").value;
-
-           sql_getuser = "select username from geologgedin where logginschlussel =?;"
-                
-           st=$dbh.prepare(sql_getuser);
-           st.execute(key);
+        #check ob user eingelogt ist
+       sql_getuser = "select username from geologgedin where logginschlussel =?;"
             
-            if $dbh.affected_rows > 0
-                st.fetch do |row|
+       st=$dbh.prepare(sql_getuser);
+       st.execute(key);
+       
+        if $dbh.affected_rows > 0
+        #user ist eingelogt
+            st.fetch do |row|
 
-                    YAML::dump(row)
-                    username = row[0]
-                end
-            else
-              
-              xml = "<error no='666'>U r not loged in</error>"
-              return [501,{"Content-Type" => "text/xml"},[xml]]
-              
-              
+                YAML::dump(row)
+                username = row[0]
             end
+        else
+       #user ist nicht eingelogt -> error   
+          xml = "<error no='666'>U r not loged in</error>"
+          return [501,{"Content-Type" => "text/xml"},[xml]]
           
-
+          
+        end
+          
+#benutzer ist eingelogt deshalb lesen wir die inhalte aus der xml antwort aus.
     xmlresponse = "<gts query='message/save'>"
 
     doc.find("/gts/content").each {|node| 
       lon=node.attributes.get_attribute("lon").value; 
       lat=node.attributes.get_attribute("lat").value;
-      
+     #wat ? 
       begin 
         id = node.attributes.get_attribute("id").value;
       rescue
         id = nil;
       end                
-    
+    #we read the contents
       begin                                        
         content = node.first.content;
       rescue
         xml = "<error='123'>u fail</error>"
         return [500,{"Content-Type" => "text/xml"},[xml]] 
       end
-    
+    #heilige widernatürlich unfähigkeit batman!
 	begin                                        
 		username="lehrer"
 	     returnary = writetodb(lat, lon, content, username, id);
-	rescue Exception => e
-                        xml = "<error no='6'>DB Error: #{e.message}.</error>"
-                        return[500,{"Content-Type" => "text/xml"},[xml]]
+    rescue Exception => e
+        xml = "<error no='6'>DB Error: #{e.message}.</error>"
+        return[500,{"Content-Type" => "text/xml"},[xml]]
 	end
 
      
      
      if id==nil
-       xmlresponse = xmlresponse+"<content lat='#{lat}' lon='#{lon}' id='#{returnary[0]}' user='#{username}' timestamp='#{returnary[1]}'>" 
+        xmlresponse = xmlresponse+"<content lat='#{lat}' lon='#{lon}' id='#{returnary[0]}' user='#{username}' timestamp='#{returnary[1]}'>" 
      else
-       xmlresponse = xmlresponse+"<content lat='#{lat}' lon='#{lon}' id='#{id}' user='#{username}' timestamp='#{returnary[1]}'>" 
+       #this never happens does it?
+        xmlresponse = xmlresponse+"<content lat='#{lat}' lon='#{lon}' id='#{id}' user='#{username}' timestamp='#{returnary[1]}'>" 
      end
      
      xmlresponse = xmlresponse+content+"</content>"
