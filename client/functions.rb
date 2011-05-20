@@ -122,7 +122,10 @@ def getResponse(relaxDocument, requestUrl, erroranzahl, correctanzahl, key=0, id
 			if x.match('.xml')
 				begin
 					xml = IO.read('error/'+x)
-
+				rescue
+					puts "2: fehler beim lesen von datei " + x
+					
+				end
 					request = Net::HTTP::Post.new(url.path)
 
 					request.body = xml
@@ -155,7 +158,7 @@ def getResponse(relaxDocument, requestUrl, erroranzahl, correctanzahl, key=0, id
 						#puts "Fehler: id2 ersetzen"
 					end
 					
-					puts x , " - "
+					puts x
 					puts xml , "<br/>"
 
 					begin
@@ -174,7 +177,7 @@ def getResponse(relaxDocument, requestUrl, erroranzahl, correctanzahl, key=0, id
 					begin
 						instance = XML::Document.string(response)
 					rescue
-						puts "Umwandlung für RNG"
+						puts "Fehler im Response (XML)"
 					end
 					# validate returns row error message and exits.
 					begin
@@ -195,9 +198,7 @@ def getResponse(relaxDocument, requestUrl, erroranzahl, correctanzahl, key=0, id
 					if(response != "")
 						puts "response " , response
 					end
-				rescue
-					puts "fehler1 beim lesen von datei " + x
-				end
+				
 				puts "<br/>"
 				puts "<br/>"
 			end
