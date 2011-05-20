@@ -109,7 +109,7 @@ getResponse('../../../interface/message/save/response.rng', 'http://vs099.virtua
 	
 #else
 	# loop durch alle errors
-#	["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15"].each { |the_id| 
+#	["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14"].each { |the_id| 
 		
 #		begin
 #			xml = IO.read("error" + the_id + ".xml")
