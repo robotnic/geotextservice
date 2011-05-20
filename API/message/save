@@ -5,7 +5,10 @@ require '../functions/connect.rb'
 require 'xml'
 require 'rack'
 
+
 $dbh=dbconnect   #hier eine global variable mit $
+
+$username = 'arse';
 
 XML::Error.set_handler(&XML::Error::QUIET_HANDLER)
 
@@ -24,7 +27,7 @@ class MessageSave
 		if(c=="die")
             puts "FAAAAAAAAAAAATHER"
     		abort
-		end
+		end #c==die end
 
 		#Errorhandling
     
@@ -33,7 +36,7 @@ class MessageSave
 		rescue Exception => e
 			xml = "<error no='1'>XML ERROR while calling  message/save: #{e.message}</error>"
 			return [501,{"Content-Type" => "text/xml"},[xml]] 
-		end
+		end #exception handling end
 		
 
 		#read the rng file
@@ -46,35 +49,34 @@ class MessageSave
 				rescue Exception => e
 					xml = "<error no='7'>XML ERROR: #{e.message}</error>"
 					return [501,{"Content-Type" => "text/xml"},[xml]]                
-				end
+				end #validate_relaxng end
 
 		rescue
 			xml = "<error no='5'>Couldn't open relaxng file. Check permissions or path</error>"
 			return [501,{"Content-Type" => "text/xml"},[xml]]
-		end
-    	#loggedin key
+		end #read rng file end
+		
+		
+    #loggedin key
 		key=doc.root.attributes.get_attribute("key").value;
         #check ob user eingelogt ist
        sql_getuser = "select username from geologgedin where logginschlussel =?;"
             
        st=$dbh.prepare(sql_getuser);
        st.execute(key);
-       
+           
         if $dbh.affected_rows > 0
         #user ist eingelogt
-            st.fetch do |row|
-
-                YAML::dump(row)
-                username = row[0]
-            end
+            while row = st.fetch do
+                $username = row[0]
+            end #do end
+            
         else
-       #user ist nicht eingelogt -> error   
+     #user ist nicht eingelogt -> error   
           xml = "<error no='666'>U r not loged in</error>"
-          return [501,{"Content-Type" => "text/xml"},[xml]]
-          
-          
-        end
-          
+         # return [501,{"Content-Type" => "text/xml"},[xml]]
+        end #affected rows für user end
+     
 #benutzer ist eingelogt deshalb lesen wir die inhalte aus der xml antwort aus.
     xmlresponse = "<gts query='message/save'>"
 
@@ -94,22 +96,25 @@ class MessageSave
         xml = "<error='123'>u fail</error>"
         return [500,{"Content-Type" => "text/xml"},[xml]] 
       end
-    #heilige widernatürlich unfähigkeit batman!
-	begin                                        
-		username="lehrer"
-	     returnary = writetodb(lat, lon, content, username, id);
+    #heilige widernatürliche unfähigkeit batman!
+	begin                               
+		if $username == nil
+		  $username = 'aaa'
+	  end
+	  
+	     returnary = writetodb(lat, lon, content, $username, id);
     rescue Exception => e
         xml = "<error no='6'>DB Error: #{e.message}.</error>"
-        return[500,{"Content-Type" => "text/xml"},[xml]]
+       return[500,{"Content-Type" => "text/xml"},[xml]]
 	end
 
      
      
      if id==nil
-        xmlresponse = xmlresponse+"<content lat='#{lat}' lon='#{lon}' id='#{returnary[0]}' user='#{username}' timestamp='#{returnary[1]}'>" 
+        xmlresponse = xmlresponse+"<content lat='#{lat}' lon='#{lon}' id='#{returnary[0]}' user='#{$username}' timestamp='#{returnary[1]}'>" 
      else
        #this never happens does it?
-        xmlresponse = xmlresponse+"<content lat='#{lat}' lon='#{lon}' id='#{id}' user='#{username}' timestamp='#{returnary[1]}'>" 
+        xmlresponse = xmlresponse+"<content lat='#{lat}' lon='#{lon}' id='#{id}' user='#{$username}' timestamp='#{returnary[1]}'>" 
      end
      
      xmlresponse = xmlresponse+content+"</content>"
@@ -120,22 +125,15 @@ class MessageSave
       
       puts YAML::dump(xmlresponse)
       
-      return [200,{"Content-Type" => "text/xml"},[xmlresponse]]
+       return [200,{"Content-Type" => "text/xml"},[xmlresponse]]
 	end
-  
-  
-  
-  
-  
-  
-  
-  
+
   
   def writetodb(lat,lon,message,username,id=nil)   
       
       if id.nil?
      	sql="INSERT INTO geopoints ( `wgs` ,`lat`,`lon`, `message`,`username`)VALUES(GeomFromText(?),?,?,?,?)";
-#                st.execute("POINT("+lat.to_s+" "+lon.to_s+")",content);   
+#         st.execute("POINT("+lat.to_s+" "+lon.to_s+")",content);   
 #        sql = "insert into geopoints(lat,lon,message,username) values (?,?,?,?);"
     
         st=$dbh.prepare(sql);

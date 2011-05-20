@@ -171,8 +171,11 @@ def getResponse(relaxDocument, requestUrl, erroranzahl, correctanzahl, key=0, id
 					##VALIDATE RELAX NG##
 					#####################
 					# parse xml document to be validated
-					instance = XML::Document.string(response)
-
+					begin
+						instance = XML::Document.string(response)
+					rescue
+						puts "Umwandlung für RNG"
+					end
 					# validate returns row error message and exits.
 					begin
 						instance.validate_relaxng(relaxng_schema)
