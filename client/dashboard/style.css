@@ -63,10 +63,24 @@ h2 {
   margin: 20px 0;
   background-color: #525252;
   padding: 3px;
+  overflow: auto;
 }
 #results .response .ok {
   border: 2px solid green;
 }
 #results .response .error {
   border: 2px solid red;
+}
+
+#status {
+  width: 20px;
+  height: 20px;
+  display: block;
+  border: 1px solid #eee;
+}
+#status.bad {
+  background-color: red;
+}
+#status.good {
+  background-color: green;
 }

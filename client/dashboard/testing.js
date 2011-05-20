@@ -234,6 +234,9 @@ function doAjax(script,id) {
           // responseText2 = htmlEncode(responseText);
                     
 					$("#"+id).html(responseText);
+          
+          if($(".response .error").length > 0) $("#status").removeClass("good").addClass("bad");
+          else if($(".response .ok").length > 0) $("#status").removeClass("bad").addClass("good");
 
 				}
 				break;
@@ -250,6 +253,8 @@ function doAjax(script,id) {
 function clearResults()
 {
   $(".response").remove();
+  $("#status").removeClass("bad");
+  $("#status").removeClass("good");
 }
 
 function htmlEncode(s)
