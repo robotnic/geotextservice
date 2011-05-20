@@ -31,19 +31,22 @@ key=xml.find("/gts/success/@key").first.value
 
 
 #Message vorher schreiben
-textMsgSave = "<gts key='"+key+"'><content lat='48.3' lon='-23.6' id='1'>Vogel Quax zwickt Johnys Pferd Bim</content></gts>"
+textMsgSave = "<gts key='"+key+"'><content lat='48.3' lon='-23.6'>Hallo Welt 1</content></gts>"
 
 urlMsgSave = URI.parse('http://vs099.virtual.fhstp.ac.at/~dm101527/geotextservice/API/message/save')
+
+requestMsgSave = Net::HTTP::Post.new(urlMsgSave.path)
 requestMsgSave.body = textMsgSave
+puts textMsgSave
 responseMsgSave = Net::HTTP.start(urlMsgSave.host, urlMsgSave.port){|http| http.request(requestMsgSave)}
 
 responseMsgSave = responseMsgSave.body
-#puts responseLogin
+puts responseMsgSave
 xml = XML::Document.string(responseMsgSave)
 id1=xml.find("/gts/content/@id").first.value
 
 #Message2 vorher schreiben
-textMsgSave = "<gts key='"+key+"'><content lat='50.1' lon='15.6' id='1'>Text 3 Vogel Quax zwickt Johnys Pferd Bim</content></gts>"
+textMsgSave = "<gts key='"+key+"'><content lat='50.1' lon='15.6'>Text 3 2</content></gts>"
 
 urlMsgSave = URI.parse('http://vs099.virtual.fhstp.ac.at/~dm101527/geotextservice/API/message/save')
 requestMsgSave.body = textMsgSave
