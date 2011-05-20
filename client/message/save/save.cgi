@@ -4,7 +4,31 @@
 
 require "../../functions.rb"
 
-getResponse('../../../interface/message/save/response.rng', 'http://vs099.virtual.fhstp.ac.at/~dm101527/geotextservice/API/message/save', 15, 3)
+require "uri"
+require "net/http"
+require 'xml'
+
+user = "Kerstin"
+pw = "1234"
+
+urlLogin = URI.parse('http://vs099.virtual.fhstp.ac.at/~dm101527/geotextservice/API/user/login')
+requestLogin = Net::HTTP::Post.new(urlLogin.path)
+
+textLogin = "<gts><username>"+user+"</username><password>"+pw+"</password></gts>"
+
+requestLogin.body = textLogin
+
+responseLogin = Net::HTTP.start(urlLogin.host, urlLogin.port){|http| http.request(requestLogin)}
+
+responseLogin = responseLogin.body
+#puts responseLogin
+xml = XML::Document.string(responseLogin)
+key=xml.find("/gts/success/@key").first.value
+#key=xml.find("/error/@no").first.value
+#puts key
+
+
+getResponse('../../../interface/message/save/response.rng', 'http://vs099.virtual.fhstp.ac.at/~dm101527/geotextservice/API/message/save', 15, 3, key)
 
 
 #require "uri"

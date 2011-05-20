@@ -1,0 +1,95 @@
+#! /usr/bin/ruby
+
+require 'rubygems'
+require '../functions/connect.rb'
+require 'xml'
+require 'rack'
+
+$dbh=dbconnect
+
+XML::Error.set_handler(&XML::Error::QUIET_HANDLER)
+
+class MessageDelete
+
+    def call(env)
+        
+        req= Rack::Request.new(env);
+	
+        #kill the server from outside
+		c=req.query_string()
+		if(c=="die")
+            puts "FAAAAAAAAAAAATHER"
+    		abort
+		end
+
+		#Errorhandling
+        #read the xml file    
+		begin
+			doc = XML::Document.string(req.body.read);			
+		rescue Exception => e
+			xml = "<error no='1'>XML ERROR while calling  message/delete: #{e.message}</error>"
+			return [501,{"Content-Type" => "text/xml"},[xml]] 
+		end
+		#done reading xml file
+
+		#read the rng file
+		begin
+			relaxng_doc = XML::Document.file('../../interface/message/delete/request.rng')
+			relaxng_sch = XML::RelaxNG.document(relaxng_doc)
+			#validate relax ng    
+				begin 
+					doc.validate_relaxng(relaxng_sch)
+				rescue Exception => e
+					xml = "<error no='7'>XML ERROR: #{e.message}</error>"
+					return [501,{"Content-Type" => "text/xml"},[xml]]                
+				end
+            #done validating
+		rescue
+			xml = "<error no='5'>Couldn't open relaxng file. Check permissions or path</error>"
+			return [501,{"Content-Type" => "text/xml"},[xml]]
+		end
+        #done reading rng file
+      
+        key=doc.root.attributes.get_attribute("key").value;
+ 
+        #check if user is logged in
+        sql_getuser = "select username from geologgedin where logginschlussel =?;"
+            
+        st=$dbh.prepare(sql_getuser);
+        st.execute(key);
+       
+        if $dbh.affected_rows > 0
+        #user ist eingelogt
+            st.fetch do |row|
+                username = row[0]
+            end
+
+            st_delete=$dbh.prepare("DELETE FROM geopoints WHERE id=? and username=?")
+            xmlresponse = "<gts query='message/delete'>"
+            
+            doc.find("/gts/delete").each {|node|
+                id=node.attributes.get_attribute("id").value                    
+                
+                if st_delete.execute(id, username) == 0
+                    xmlresponse = xmlresponse+"<delete id='#{id}' status='not authorized' statusnumber='1'>"
+                else
+                    xmlresponse = xmlresponse+"<delete id='#{id}' status='ok'>"
+                end
+            }
+                xmlresponse = xmlresponse+"</gts>"
+
+                return [200,{"Content-Type" => "text/xml"},[xmlresponse]]           
+            
+        else
+        #user ist nicht eingelogt -> error   
+          xml = "<error no='666'>U r not loged in</error>"
+          return [501,{"Content-Type" => "text/xml"},[xml]]
+          
+        end
+        #user login check ende
+       
+    end #end call
+
+end #end MessageDelete
+
+Rack::Handler::FastCGI.run MessageDelete.new

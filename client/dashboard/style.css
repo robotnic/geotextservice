@@ -49,3 +49,15 @@ h2 {
 	width: 60%;
 	min-height: 400px;
 }
+#results .response {
+  border: 1px solid #CCCCCC;
+  margin: 20px 0;
+  background-color: #525252;
+  padding: 3px;
+}
+#results .response .ok {
+  border: 2px solid green;
+}
+#results .response .error {
+  border: 2px solid red;
+}

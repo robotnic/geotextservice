@@ -1,4 +1,4 @@
-<gts query='message/save'>
+<gts key='[key]'>
 <content lat='48.2' lon='15.6' id='abc'>
 Hier kommt das grosse Blabla
 </content>

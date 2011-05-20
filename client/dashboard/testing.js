@@ -1,5 +1,7 @@
 
 
+var path = "http://vs099.virtual.fhstp.ac.at/~dm101551/projekt/geotextservice/client/";
+
 $(document).ready(function() {
   var startTime = new Date().getMilliseconds();
 
@@ -23,34 +25,106 @@ $(document).ready(function() {
 
 });
 
-var paths = new Array();
+// var paths = new Array();
 
-function doSave() {
-	//add save paths
-	for (i=1;i<16;i++) {
-		path = "save.cgi?type=error&id="+i;
-		paths.push(path);
+// function doSave() {
+	// //add save paths
+	// for (i=1;i<16;i++) {
+		 // = "save.cgi?type=error&id="+i;
+		// paths.push(path);
+	// }
+	// for (i=1;i<4;i++) {
+		// path = "save.cgi?type=correct&id="+i;
+		// paths.push(path);
+	// }
+// }
+
+
+// function doAll() {
+	// for(i=0;i<paths.length;i++) {
+		// doAjax(paths[i],i);
+	// }
+
+// }
+
+function doMessageSave()
+{
+  clearResults();
+  
+  // alle xmls für message/save registrieren
+  xmllist = new Array();
+  for (i=1;i<16;i++) {
+		var xml = "message/save/save.cgi?type=error&id="+i;
+		xmllist.push(xml);
 	}
 	for (i=1;i<4;i++) {
-		path = "save.cgi?type=correct&id="+i;
-		paths.push(path);
+		var xml = "message/save/save.cgi?type=correct&id="+i;
+		xmllist.push(xml);
+	}
+  
+  
+  for(i=0;i<xmllist.length;i++) {
+		doAjax(xmllist[i],i);
+	}
+  
+
+  
+}
+
+
+function doMessageLoad()
+{
+  clearResults();
+  
+  // alle xmls für message/load registrieren
+  xmllist = new Array();
+  for (i=1;i<16;i++) {
+		var xml = "message/load/load.cgi?type=error&id="+i;
+		xmllist.push(xml);
+	}
+	for (i=1;i<4;i++) {
+		var xml = "message/load/load.cgi?type=correct&id="+i;
+		xmllist.push(xml);
+	}
+  
+  
+  for(i=0;i<xmllist.length;i++) {
+		doAjax(xmllist[i],i);
+	}
+}
+
+function doUserLogin()
+{
+  clearResults();
+  
+  // alle xmls für user/save registrieren
+  xmllist = new Array();
+  for (i=1;i<10;i++) {
+		var xml = "user/login/login.cgi?type=error&id="+i;
+		xmllist.push(xml);
+	}
+	for (i=1;i<2;i++) {
+		var xml = "user/login/login.cgi?type=correct&id="+i;
+		xmllist.push(xml);
+	}
+  
+  
+  for(i=0;i<xmllist.length;i++) {
+		doAjax(xmllist[i],i);
 	}
 }
 
 
-function doAll() {
-	doSave();
-	for(i=0;i<paths.length;i++) {
-		doAjax(paths[i],i);
-	}
 
-}
+
+
+
 
 function doAjax(script,id) {
 	//erstellen des requests
 	var req = null;
 
-	var path = "http://vs099.virtual.fhstp.ac.at/~dm101513/geotextservice/client/message/save/";
+	
 	
 	try{
 		req = new XMLHttpRequest();
@@ -84,7 +158,7 @@ function doAjax(script,id) {
 				}else{    
 					//schreibe die antwort in den div container mit der class result
 
-/*					var newRes = document.createElement("div");
+/*			  var newRes = document.createElement("div");
 					$(newRes).addClass("response");
 					$("#results").append($(newRes));
 					$(".result").html(req.responseText);
@@ -93,7 +167,13 @@ function doAjax(script,id) {
 					$(newRes).addClass("response");
 					$(newRes).attr("id", id);
 					$("#results").append($(newRes));
-					$("#"+id).html(req.responseText);
+          
+          var responseText = req.responseText;
+          
+          // responseText2 = responseText.replace("statt","HHHHHHH");
+          // responseText2 = htmlEncode(responseText);
+                    
+					$("#"+id).html(responseText);
 
 				}
 				break;
@@ -101,8 +181,22 @@ function doAjax(script,id) {
 				return false;
 				break;     
 		}
-	};
+	}; 
 
 	  req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 	req.send(null);
+}
+
+function clearResults()
+{
+  $(".response").remove();
+}
+
+function htmlEncode(s)
+{
+  var el = document.createElement("div");
+  el.innerText = el.textContent = s;
+  s = el.innerHTML;
+  delete el;
+  return s;
 }

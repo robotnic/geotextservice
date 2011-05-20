@@ -3,7 +3,10 @@ require "net/http"
 require 'cgi'
 require "xml"
 
-def getResponse(relaxDocument, requestUrl, erroranzahl, correctanzahl)
+def getResponse(relaxDocument, requestUrl, erroranzahl, correctanzahl, key=0, id1=0, id2=0)
+	#if(key!=0)
+	#	puts key
+	#end
 
 	cgi = CGI.new
 
@@ -38,10 +41,39 @@ def getResponse(relaxDocument, requestUrl, erroranzahl, correctanzahl)
 			puts "fehler beim lesen von datei " + type.to_s() + id.to_s() + ".xml"
 			exit
 		end
-	
+		
 		request = Net::HTTP::Post.new(url.path)
 
 		request.body = xml
+		
+		begin
+			if(key!=0)
+				if (xml.match('[key]'))
+					xml["[key]"]= key
+				end
+			end
+		rescue
+			#puts "Fehler: key ersetzen"
+		end
+		begin
+			if(id1!=0)
+				if (xml.match('[id1]'))
+					xml["[id1]"]= id1
+				end
+			end
+		rescue
+			#puts "Fehler: id1 ersetzen"
+		end
+		begin
+			if(id2!=0)
+				if (xml.match('[id2]'))
+					xml["[id2]"]= id2
+				end
+			end
+		rescue
+			#puts "Fehler: id2 ersetzen"
+		end
+		
 		puts x
 		puts xml , "<br/>"
 
@@ -75,8 +107,8 @@ def getResponse(relaxDocument, requestUrl, erroranzahl, correctanzahl)
 		end
 
 		# für response
-		response = response.gsub("<", "&lt;")
-		response = response.gsub(">", "&gt;")
+		#response = response.gsub("<", "&lt;")
+		#response = response.gsub(">", "&gt;")
 	
 		if(response != "")
 			puts "response " , response
@@ -94,6 +126,35 @@ def getResponse(relaxDocument, requestUrl, erroranzahl, correctanzahl)
 					request = Net::HTTP::Post.new(url.path)
 
 					request.body = xml
+					
+					begin
+						if(key!=0)
+							if (xml.match('[key]'))
+								xml["[key]"]= key
+							end
+						end
+					rescue
+						#puts "Fehler: key ersetzen<br/>"
+					end
+					begin
+						if(id1!=0)
+							if (xml.match('[id1]'))
+								xml["[id1]"]= id1
+							end
+						end
+					rescue
+						#puts "Fehler: id1 ersetzen"
+					end
+					begin
+						if(id2!=0)
+							if (xml.match('[id2]'))
+								xml["[id2]"]= id2
+							end
+						end
+					rescue
+						#puts "Fehler: id2 ersetzen"
+					end
+					
 					puts x , " - "
 					puts xml , "<br/>"
 
@@ -124,8 +185,8 @@ def getResponse(relaxDocument, requestUrl, erroranzahl, correctanzahl)
 					end
 
 					# fuer response
-					response = response.gsub("<", "&lt;")
-					response = response.gsub(">", "&gt;")
+					#response = response.gsub("<", "&lt;")
+					#response = response.gsub(">", "&gt;")
 
 					puts "sending..."
 					if(response != "")
