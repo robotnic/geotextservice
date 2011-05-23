@@ -53,6 +53,36 @@ rescue
 end
 
 
+#User anlegen
+registerUser= "<gts><username>deleteme2</username><password>1234</password></gts>"
+
+urlRegisterUser = URI.parse('http://vs099.virtual.fhstp.ac.at/~dm101527/geotextservice/API/user/register')
+
+begin
+    puts "<br>starting input 2"
+	begin
+		requestRegisterUser = Net::HTTP::Post.new(urlRegisterUser.path)
+		requestRegisterUser.body = registerUser
+		puts registerUser
+	rescue
+		puts "Request 2 geht schief"
+	end
+	puts "<br>getting response 2"
+	begin
+		responseRegisterUser = Net::HTTP.start(urlRegisterUser.host, urlRegisterUser.port){|http| http.request(requestRegisterUser)}
+		responseRegisterUser = responseRegisterUser.body
+		puts "<br>response: "
+		puts responseRegisterUser
+	rescue
+		puts "Response 2 passt nicht"
+	end
+    puts "<br>END of INSERTING DATA"
+rescue
+	puts "Save2 geht nicht"
+	exit
+end
+
+
 getResponse('../../../interface/user/delete/response.rng', 'http://vs099.virtual.fhstp.ac.at/~dm101507/geotextservice/API/user/delete', 9, 1, key)
 
 #require "uri"
