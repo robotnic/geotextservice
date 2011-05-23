@@ -61,6 +61,7 @@ class UserDelete
         
         if $dbh.affected_rows > 0
         #user ist eingelogt
+            puts "user ist eingelogt"
             while row = st.fetch do
                 username = row[0]
                 break
@@ -72,6 +73,7 @@ class UserDelete
 
             if $dbh.affected_rows > 0
                 #user is admin
+                puts "user ist admin"
                 st.finish
                 st_delete=$dbh.prepare("DELETE from geousers where username=? and admin=0")
 
@@ -84,7 +86,7 @@ class UserDelete
                         xmlresponse = xmlresponse+"<delete user='#{deleteme}' />"
                     }
                 xmlresponse = xmlresponse+"</gts>"
-
+                puts xmlresponse
                 return [200,{"Content-Type" => "text/xml"},[xmlresponse]]           
 
             else
@@ -104,6 +106,6 @@ class UserDelete
        
     end #end call
 
-end #end MessageDelete
+end #end UserDelete
 
 Rack::Handler::FastCGI.run UserDelete.new
