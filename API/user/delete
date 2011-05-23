@@ -1,74 +1,109 @@
 #! /usr/bin/ruby
 
 require 'rubygems'
-require 'connect.rb'
+require '../functions/connect.rb'
 require 'xml'
 require 'rack'
-require 'digest/sha1'
-require 'key.rb'
 
-class UserRegister
+$dbh=dbconnect
+
+XML::Error.set_handler(&XML::Error::QUIET_HANDLER)
+
+class UserDelete
+
     def call(env)
-    
-    req = Rack::Request.new(env)
-    begin 
-        doc = XML::Document.string(req.body.read)
-    rescue Exception => e
-        xml = "<error no='1'>XML ERROR: #{e.message}</error>"
-        return [200,{"Content-Type" => "text/xml"},[xml]]                
-     end
+        
+        req= Rack::Request.new(env);
+	
+        #kill the server from outside
+		c=req.query_string()
+		if(c=="die")
+            puts "FAAAAAAAAAAAATHER"
+    		abort
+		end
 
-#Errorhandling
+		#Errorhandling
+        #read the xml file    
+		begin
+			doc = XML::Document.string(req.body.read);			
+		rescue Exception => e
+			xml = "<error no='1'>XML ERROR while calling  user/delete: #{e.message}</error>"
+			return [501,{"Content-Type" => "text/xml"},[xml]] 
+		end
+		#done reading xml file
 
-#read the file
-    begin
-        relaxng_doc = XML::Document.file('../../interface/user/register/request.rng')
-        relaxng_sch = XML::RelaxNG.document(relaxng_doc)
-        #validate relax ng    
-            begin 
-                doc.validate_relaxng(relaxng_sch)
-            rescue Exception => e
-                 xml = "<error no='2'>XML Validation ERROR: #{e.message}</error>"
-                return [200,{"Content-Type" => "text/xml"},[xml]]                
+		#read the rng file
+		begin
+			relaxng_doc = XML::Document.file('../../interface/user/delete/request.rng')
+			relaxng_sch = XML::RelaxNG.document(relaxng_doc)
+			#validate relax ng    
+				begin 
+					doc.validate_relaxng(relaxng_sch)
+				rescue Exception => e
+					xml = "<error no='7'>XML ERROR: #{e.message}</error>"
+					return [501,{"Content-Type" => "text/xml"},[xml]]                
+				end
+            #done validating
+		rescue
+			xml = "<error no='5'>Couldn't open relaxng file. Check permissions or path</error>"
+			return [501,{"Content-Type" => "text/xml"},[xml]]
+		end
+        #done reading rng file
+      
+        key=doc.root.attributes.get_attribute("key").value;
+ 
+        #check if user is logged in
+        sql_getuser = "select username from geologgedin where logginschlussel =?;"
+            
+        st=$dbh.prepare(sql_getuser)
+        st.execute(key)
+        username = "" 
+        
+        if $dbh.affected_rows > 0
+        #user ist eingelogt
+            while row = st.fetch do
+                username = row[0]
+                break
             end
+            st.finish
 
-    rescue
-        xml = "<error no='3'>Couldn't open relaxng file. Check permissions or path</error>"
-        return [200,{"Content-Type" => "text/xml"},[xml]]
-    end
-#kill the server from outside
-c=req.query_string()
-if(c=="die")
-abort
-end
+            st=$dbh.prepare("select username from geousers where username=? and admin=1;")
+            st.execute(username)
 
-    userxml = doc.find("/gts/username")
-    passxml = doc.find("/gts/password")
+            if $dbh.affected_rows > 0
+                #user is admin
+                st.finish
+                st_delete=$dbh.prepare("DELETE from geousers where username=? and admin=0")
 
-    username = userxml.first.content
-    password = Digest::SHA1.hexdigest(passxml.first.content)
+                xmlresponse = "<gts query='user/delete'>"
+            
+                    doc.find("/gts/delete").each {|node|
+                        deleteme=node.attributes.get_attribute("user").value                    
+                        
+                        st_delete.execute(deleteme)
+                        xmlresponse = xmlresponse+"<delete user='#{deleteme}' />"
+                    }
+                xmlresponse = xmlresponse+"</gts>"
 
-    create(username,password)
+                return [200,{"Content-Type" => "text/xml"},[xmlresponse]]           
 
-    key = get_session_key()
-    end
-    def create(username,password)
-        dbh = dbconnect
-
-        sql = "insert into geousers (username,password) values (?,?);"
-        begin 
-           st = dbh.prepare(sql)
-           st.execute(username,password)
- 
-           xml = "<gts query='user/register'><success key='#{key}'/></gts>"
-           return [200,{"Content-Type" => "text/xml"},[xml]]  
- 
-       rescue Exception => e
-           xml = "<error no='6'>DB Error: #{e.message}.</error>"
-           return [200,{"Content-Type" => "text/xml"},[xml]]  
+            else
+                #user ist nicht admin -> error   
+                xml = "<error no='100'>Not authorized to do this.</error>"
+                return [501,{"Content-Type" => "text/xml"},[xml]]
+          
+            end
+                       
+        else
+        #user ist nicht eingelogt -> error   
+          xml = "<error no='666'>U r not loged in</error>"
+          return [501,{"Content-Type" => "text/xml"},[xml]]
+          
         end
-    end
-end
+        #user login check ende
+       
+    end #end call
 
-Rack::Handler::FastCGI.run UserRegister.new
+end #end MessageDelete
 
+Rack::Handler::FastCGI.run UserDelete.new
