@@ -20,12 +20,6 @@ class MessageLoad
 
 		if(c=="die")
 		    abort
-		elsif c=="bbox"
-			#das ist kaputt
-		    #   bboxarray = c.split(/([(0-9)(\.?(0-9)*)?],?[(0-9)(\.?(0-9)*)?]*)/)
-
-		    #puts YAML::dump(c)
-		    #puts "query: ",c
 		end #End if
 		cc=c.split("=")[1]
 		#cc="-180,-90,180,90";
