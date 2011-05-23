@@ -11,10 +11,11 @@
 			<zeroOrMore>
     				<element name='delete'>
         				<attribute name='user'>
-            					<data type='string'/>
+            					<data type='string'>
             					<param name='maxLength'>
                         	    	50
                         	    </param>
+                                </data>
         				</attribute>
     				</element>
 			</zeroOrMore>
