@@ -55,26 +55,23 @@ class UserDelete
         #check if user is logged in
         sql_getuser = "select username from geologgedin where logginschlussel =?;"
             
-        st=$dbh.prepare(sql_getuser)
-        st.execute(key)
+        st_getuser=$dbh.prepare(sql_getuser)
+        st_getuser.execute(key)
         username = "" 
         
         if $dbh.affected_rows > 0
         #user ist eingelogt
-            puts "user ist eingelogt"
-            while row = st.fetch do
+           while row = st_getuser.fetch do
                 username = row[0]
                 break
             end
-            st.finish
-
-            st=$dbh.prepare("select username from geousers where username=? and admin=1;")
-            st.execute(username)
+ 
+            st_checkadmin=$dbh.prepare("select username from geousers where username=? and admin=1;")
+            st_checkadmin.execute(username)
 
             if $dbh.affected_rows > 0
                 #user is admin
-                puts "user ist admin"
-                st.finish
+               
                 st_delete=$dbh.prepare("DELETE from geousers where username=? and admin=0")
 
                 xmlresponse = "<gts query='user/delete'>"
@@ -86,8 +83,7 @@ class UserDelete
                         xmlresponse = xmlresponse+"<delete user='#{deleteme}' />"
                     }
                 xmlresponse = xmlresponse+"</gts>"
-                puts xmlresponse
-                return [200,{"Content-Type" => "text/xml"},[xmlresponse]]           
+               return [200,{"Content-Type" => "text/xml"},[xmlresponse]]           
 
             else
                 #user ist nicht admin -> error   
