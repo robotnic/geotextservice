@@ -2,12 +2,12 @@
 	<start>
 		<element name='gts'>
 			<attribute name='key'>
-        			<data type='string'>
+        		<data type='string'>
 					<param name='maxLength'>
 						40
 					</param>
 				</data>
-    			</attribute>
+    		</attribute>
 			<zeroOrMore>
     				<element name='delete'>
         				<attribute name='user'>
