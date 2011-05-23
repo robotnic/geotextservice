@@ -36,6 +36,7 @@ textMsgSave = "<gts key='"+key+"'><content lat='48.3' lon='-23.6'>Hallo Welt 1</
 urlMsgSave = URI.parse('http://vs099.virtual.fhstp.ac.at/~dm101527/geotextservice/API/message/save')
 
 begin
+    puts "<br>starting input 1"
 	begin
 		requestMsgSave = Net::HTTP::Post.new(urlMsgSave.path)
 		requestMsgSave.body = textMsgSave
@@ -43,16 +44,16 @@ begin
 	rescue
 		puts "Request 1 geht schief"
 	end
-	
+	puts "<br>getting response 1"
 	begin
 		responseMsgSave = Net::HTTP.start(urlMsgSave.host, urlMsgSave.port){|http| http.request(requestMsgSave)}
 		responseMsgSave = responseMsgSave.body
-		puts "response: "
+		puts "<br>response: "
 		puts responseMsgSave
 	rescue
 		puts "Response 1 passt nicht"
 	end
-	
+	puts "<br>getting id 1"
 	begin
 		xml = XML::Document.string(responseMsgSave)
 		id1=xml.find("/gts/content/@id").first.value
@@ -63,11 +64,9 @@ begin
 
 	#Message2 vorher schreiben
 	textMsgSave2 = "<gts key='"+key+"'><content lat='50.1' lon='15.6'>Text 3 2</content></gts>"
-
-	urlMsgSave2 = URI.parse('http://vs099.virtual.fhstp.ac.at/~dm101527/geotextservice/API/message/save')
 	
 	begin
-		requestMsgSave2 = Net::HTTP::Post.new(urlMsgSave2.path)
+		requestMsgSave2 = Net::HTTP::Post.new(urlMsgSave.path)
 		requestMsgSave2.body = textMsgSave2
 		puts textMsgSave2
 	rescue
@@ -75,9 +74,9 @@ begin
 	end
 
 	begin
-		responseMsgSave2 = Net::HTTP.start(urlMsgSave2.host, urlMsgSave2.port){|http| http.request(requestMsgSave2)}
+		responseMsgSave2 = Net::HTTP.start(urlMsgSave.host, urlMsgSave.port){|http| http.request(requestMsgSave2)}
 		responseMsgSave2 = responseMsgSave2.body
-		puts "response: "
+		puts "<br>response: "
 		puts responseMsgSave2
 	rescue
 		puts "Response 2 passt nicht"
@@ -90,6 +89,7 @@ begin
 	rescue
 		puts "Finde id2 geht schief"
 	end
+    puts "<br>END of INSERTING DATA"
 rescue
 	puts "Save geht nicht"
 	exit
