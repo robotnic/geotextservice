@@ -58,25 +58,27 @@ class MessageDelete
         st=$dbh.prepare(sql_getuser)
         st.execute(key)
         username = "" 
+        
         if $dbh.affected_rows > 0
         #user ist eingelogt
-            st.fetch do |row|
+            while row = st.fetch do
                 username = row[0]
-                $dbh.do("INSERT INTO debugtable (wert) VALUES ('problem? :7')")
             end
 
-            st_delete=$dbh.prepare("DELETE FROM geopoints WHERE id=? and username=?")
+        $dbh.query("INSERT INTO debugtable (wert) VALUES ('problem? :7')")
+#            st_delete=$dbh.prepare("DELETE FROM geopoints WHERE id=? and username=?")
+            st_delete=$dbh.prepare("INSERT INTO debugtable (wert) VALUES (?),(?)")
             xmlresponse = "<gts query='message/delete'>"
             
             doc.find("/gts/delete").each {|node|
                 id=node.attributes.get_attribute("id").value                    
                 
                 if st_delete.execute(id, username) == 0
-                    xmlresponse = xmlresponse+"<delete id='#{id}' status='not authorized' statusnumber='1'>"
+                    xmlresponse = xmlresponse+"<delete id='#{id}' status='not authorized' statusnumber='1' />"
                 else
-                    xmlresponse = xmlresponse+"<delete id='#{id}' status='ok'>"
+                    xmlresponse = xmlresponse+"<delete id='#{id}' status='ok' />"
                 end
-            }
+        }
                 xmlresponse = xmlresponse+"</gts>"
 
                 return [200,{"Content-Type" => "text/xml"},[xmlresponse]]           
