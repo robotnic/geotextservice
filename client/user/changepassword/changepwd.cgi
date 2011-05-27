@@ -5,6 +5,60 @@
 
 require "../../functions.rb"
 
+#User vorher einloggen
+user = "Kerstin"
+pw = "1234"
+
+urlLogin = URI.parse('http://vs099.virtual.fhstp.ac.at/~dm101527/geotextservice/API/user/login')
+requestLogin = Net::HTTP::Post.new(urlLogin.path)
+
+textLogin = "<gts><username>"+user+"</username><password>"+pw+"</password></gts>"
+
+requestLogin.body = textLogin
+
+responseLogin = Net::HTTP.start(urlLogin.host, urlLogin.port){|http| http.request(requestLogin)}
+
+responseLogin = responseLogin.body
+#puts responseLogin
+xml = XML::Document.string(responseLogin)
+key=xml.find("/gts/success/@key").first.value
+
+userDel = "changepwd"
+
+#alten Löschen
+deleteUser = "<gts key='"+key+"'><delete user='"+userDel+"'/></gts>"
+
+urlDelete = URI.parse('http://vs099.virtual.fhstp.ac.at/~dm101507/geotextservice/API/user/delete')
+
+begin
+    puts "<br>starting input"
+	begin
+		requestdeleteUser = Net::HTTP::Post.new(urlDelete.path)
+		requestdeleteUser.body = deleteUser
+		puts deleteUser
+	rescue
+		puts "Request geht schief"
+	end
+	puts "<br>getting response"
+	begin
+		responsedeleteUser = Net::HTTP.start(urlDelete.host, urlDelete.port){|http| http.request(requestdeleteUser)}
+		responsedeleteUser = responsedeleteUser.body
+		puts "<br>response: "
+		puts responsedeleteUser
+	rescue
+		puts "Response passt nicht"
+	end
+    puts "<br>END of INSERTING DATA"
+rescue
+	puts "Delete geht nicht"
+	exit
+end
+
+
+
+
+
+
 user = "changepwd"
 pw = "1234"
 
@@ -50,8 +104,12 @@ responseLogin = Net::HTTP.start(urlLogin.host, urlLogin.port){|http| http.reques
 responseLogin = responseLogin.body
 #puts responseLogin
 xml = XML::Document.string(responseLogin)
+begin
 key=xml.find("/gts/success/@key").first.value
-
+rescue
+	puts "key leer"
+	exit
+end
 getResponse('../../../interface/user/changepassword/response.rng', 'http://vs099.virtual.fhstp.ac.at/~dm101507/geotextservice/API/user/changepassword', 7, 1, key)
 
 #require "uri"
@@ -97,7 +155,6 @@ getResponse('../../../interface/user/changepassword/response.rng', 'http://vs099
 #else
 #  puts "<br/><b>RNG:</b> ok"
 #end
-
 
 
 
