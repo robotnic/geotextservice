@@ -1,0 +1,8 @@
+01 kein Username angegeben
+02 Username mit Sonderzeichen
+03 Schließen des Username-Tags fehlt
+04 Ganzer Username-Tag fehlt
+05 Schließen des gts-Tags fehlt
+06 gts Tag fehlerhaft und nicht geschlossen
+07 kein gts-Tag
+ 
