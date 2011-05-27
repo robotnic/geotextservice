@@ -3,7 +3,36 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Übersichtssite</title>
-<link rel="stylesheet" type="text/css" href="style.css" /></head>
+<link rel="stylesheet" type="text/css" href="style.css"  />
+<script language="javascript" type="text/javascript" src="http://code.jquery.com/jquery-1.6.1.min.js" />
+
+
+
+<script language="JavaScript">
+
+
+//funktion um das bild zu wechseln, wenn man mit der maus drüberfährt
+
+$("document").ready(function()
+{
+	
+
+	$("a").click(function(evt)
+	{
+	evt.preventDefault();
+	alert("clicked");
+		$(this + " > img").src = "button_cancel.png";
+	});
+
+});
+
+
+</script>
+
+
+
+
+</head>
 
 <body>
 
@@ -59,6 +88,46 @@
                                 <td>Performance test für message load  </td>
                                 <td>All</td>
                                 <td><img src="button_cancel.png" alt="" width="20" height="20" /></td>
+                              </tr>
+                              
+                              <tr>
+                                <td> Testfälle bei change Password: Implementation</td>
+                                <td> All</td>
+                                <td><img src="clean.png" alt="" width="20" height="20" /></td>
+                              </tr>
+                              
+                              
+                                <tr>
+                                <td> Testfälle bei Change Password: Erstellung des Error Files</td>
+                                <td> All</td>
+                                <td><img src="clean.png" alt="" width="20" height="20" /></td>
+                              </tr>
+                              
+                              
+                              <tr>
+                                <td> Testfälle bei get Avatar: Implementation</td>
+                                <td> All</td>
+                                <td><img src="clean.png" alt="" width="20" height="20" /></td>
+                              </tr>
+                              
+                              
+                                <tr>
+                                <td> Testfälle bei get Avatar: Erstellung des Error Files</td>
+                                <td> All</td>
+                                <td><img src="clean.png" alt="" width="20" height="20" /></td>
+                              </tr>
+                              
+                              <tr>
+                                <td> Testfälle bei set Avatar: Implementation</td>
+                                <td> All</td>
+                                <td><img src="clean.png" alt="" width="20" height="20" /></td>
+                              </tr>
+                              
+                              
+                                <tr>
+                                <td> Testfälle bei set Avatar: Erstellung des Error Files</td>
+                                <td> All</td>
+                                <td><img src="clean.png" alt="" width="20" height="20" /></td>
                               </tr>
                               
                                <tr>
@@ -130,7 +199,12 @@
                                 <tr>
                                 <td>Testfälle bei Message/Delete: Erstellung des Error Files</td>
                                <td> All</td>
-                                <td><img src="clean.png" alt="" width="20" height="20" /></td>
+                                <td>
+                                
+                                
+                            	<a href=""><img src="clean.png" name="clean"></a>
+                            
+         						</td>
                               </tr>
                               
                             
