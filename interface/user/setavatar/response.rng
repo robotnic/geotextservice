@@ -3,14 +3,16 @@
 		<choice>
 			<element name='gts'>
 				<attribute name='query'>
-					<data type='string' />
+					<data type='string' >
+                    </data>
 				</attribute>
 				<element name='success'>
 				</element>				
 			</element>
 			<element name='error'>
 				<attribute name='no'>
-					<data type='integer' />
+					<data type='integer'>
+                    </data>
 				</attribute>
 				<data type='string'>
 					<param name='maxLength'>

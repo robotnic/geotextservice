@@ -3,7 +3,8 @@
 		<choice>
 			<element name='gts'>
 				<attribute name='query'>
-					<data type='string' />
+					<data type='string' >
+                    </data>
 				</attribute>
 				<zeroOrMore>
 					<element name='url'>
@@ -21,7 +22,8 @@
 			</element>
 			<element name='error'>
 				<attribute name='no'>
-					<data type='integer' />
+					<data type='integer'>
+                    </data>
 				</attribute>
 				<data type='string'>
 					<param name='maxLength'>
