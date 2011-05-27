@@ -53,15 +53,20 @@ class UserGetAvatar
         username = doc.find("/gts/username").first.content
 
         st_getavatar = $dbh.prepare("SELECT username,avatar FROM geousers WHERE username=?")
-        st_getavatar.execute(username)
+        st_getavatar.execute(username.squeeze(" ").strip)
                  
-        xmlresponse = "<gts query='user/getavatar'>"
-        
-        while row = st_getavatar.fetch do
-            xmlresponse = xmlresponse+"<url username=' #{row[0]}'>#{row[1]}</url>"
+        if $dbh.affected_rows > 0
+            xmlresponse = "<gts query='user/getavatar'>"
+            while row = st_getavatar.fetch do
+                username = row[0]
+                url = row[1]            
+                xmlresponse = xmlresponse+"<url username='#{username}'>#{url}</url>"
+            end 
+               
+            xmlresponse = xmlresponse+"</gts>"
+        else
+            xmlresponse = "<error no='1001010101'>Username not in Database. Go away!</error>"
         end
-
-        xmlresponse = xmlresponse+"</gts>"
         return [200,{"Content-Type" => "text/xml"},[xmlresponse]]           
        
     end #end call

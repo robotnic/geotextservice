@@ -7,6 +7,9 @@
 						<param name='maxLength'>
 							50	
 						</param>
+                        <param name='minLength'>
+                        3
+                        </param>
 					</data>
 				</element>
 			</zeroOrMore>				
