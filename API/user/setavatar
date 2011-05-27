@@ -10,7 +10,7 @@ $dbh=dbconnect
 
 XML::Error.set_handler(&XML::Error::QUIET_HANDLER)
 
-class UserChangePassword
+class UserSetAvatar
 
     def call(env)
         
@@ -28,14 +28,14 @@ class UserChangePassword
 		begin
 			doc = XML::Document.string(req.body.read);			
 		rescue Exception => e
-			xml = "<error no='1'>XML ERROR while calling  user/changepassword: #{e.message}</error>"
+			xml = "<error no='1'>XML ERROR while calling  user/setavatar: #{e.message}</error>"
 			return [501,{"Content-Type" => "text/xml"},[xml]] 
 		end
 		#done reading xml file
 
 		#read the rng file
 		begin
-			relaxng_doc = XML::Document.file('../../interface/user/changepassword/request.rng')
+			relaxng_doc = XML::Document.file('../../interface/user/setavatar/request.rng')
 			relaxng_sch = XML::RelaxNG.document(relaxng_doc)
 			#validate relax ng    
 				begin 
@@ -67,11 +67,11 @@ class UserChangePassword
                 break
             end
                
-                st_update = $dbh.prepare("UPDATE geousers SET password=? where username=?")
-                password = Digest::SHA1.hexdigest(doc.find("/gts/password").first.content)
-                st_update.execute(password,username)
+                st_update = $dbh.prepare("UPDATE geousers SET avatar=? where username=?")
+                avatarurl = doc.find("/gts/url").first.content
+                st_update.execute(avatarurl,username)
                  
-                xmlresponse = "<gts query='user/changepassword'>"
+                xmlresponse = "<gts query='user/setavatar'>"
                 xmlresponse = xmlresponse+"<success />"
                 xmlresponse = xmlresponse+"</gts>"
                return [200,{"Content-Type" => "text/xml"},[xmlresponse]]           
@@ -86,6 +86,6 @@ class UserChangePassword
        
     end #end call
 
-end #end UserChangePassword
+end #end UserSetAvatar
 
-Rack::Handler::FastCGI.run UserChangePassword.new
+Rack::Handler::FastCGI.run UserSetAvatar.new

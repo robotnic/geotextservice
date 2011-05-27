@@ -28,7 +28,7 @@
 				</attribute>
 				<data type='string'>
 					<param name='maxLength'>
-						127
+						511
 					</param>
 				</data>
 			</element>
