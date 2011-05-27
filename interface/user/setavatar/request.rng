@@ -3,13 +3,12 @@
 		<element name='gts'>
 			<attribute name='key'>
         		<data type='string'>
-					<param name='maxLength'>
-						40
-					</param>
+					<param name='maxLength'>40</param>
 				</data>
     		</attribute>
     		<element name='url'>
     			<data type='string'>
+    				<param name="minLength">	11</param>
 				</data>
    			</element>
 		</element>
