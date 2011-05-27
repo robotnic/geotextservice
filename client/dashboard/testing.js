@@ -47,9 +47,9 @@ $(document).ready(function() {
 
 // }
 
-function doMessageSave()
+function doMessageSave(clear)
 {
-  clearResults();
+  if(clear) clearResults();
   
   // alle xmls für message/save registrieren
   xmllist = new Array();
@@ -69,9 +69,9 @@ function doMessageSave()
 }
 
 
-function doMessageLoad()
+function doMessageLoad(clear)
 {
-  clearResults();
+  if(clear) clearResults();
   
   // alle xmls für message/load registrieren
   xmllist = new Array();
@@ -90,17 +90,17 @@ function doMessageLoad()
 	}
 }
 
-function doMessageDelete()
+function doMessageDelete(clear)
 {
-  clearResults();
+  if(clear) clearResults();
   
-  // alle xmls für message/load registrieren
+  // alle xmls für message/delete registrieren
   xmllist = new Array();
-  for (i=1;i<16;i++) {
+  for (i=1;i<7;i++) {
 		var xml = "message/delete/delete.cgi?type=error&id="+i;
 		xmllist.push(xml);
 	}
-	for (i=1;i<4;i++) {
+	for (i=1;i<3;i++) {
 		var xml = "message/delete/delete.cgi?type=correct&id="+i;
 		xmllist.push(xml);
 	}
@@ -112,11 +112,11 @@ function doMessageDelete()
 }
 
 
-function doUserLogin()
+function doUserLogin(clear)
 {
-  clearResults();
+  if(clear) clearResults();
   
-  // alle xmls für user/save registrieren
+  // alle xmls für user/login registrieren
   xmllist = new Array();
   for (i=1;i<10;i++) {
 		var xml = "user/login/login.cgi?type=error&id="+i;
@@ -133,9 +133,9 @@ function doUserLogin()
 	}
 }
 
-function doUserRegister()
+function doUserRegister(clear)
 {
-  clearResults();
+  if(clear) clearResults();
   
   // alle xmls für user/save registrieren
   xmllist = new Array();
@@ -154,11 +154,11 @@ function doUserRegister()
 	}
 }
 
-function doUserDelete()
+function doUserDelete(clear)
 {
-  clearResults();
+  if(clear) clearResults();
   
-  // alle xmls für user/save registrieren
+  // alle xmls für user/delete registrieren
   xmllist = new Array();
   for (i=1;i<8;i++) {
 		var xml = "user/delete/delete.cgi?type=error&id="+i;
@@ -175,7 +175,15 @@ function doUserDelete()
 	}
 }
 
-
+//Alle Tests starten
+function doAll() {
+	clearResults();
+	doMessageSave(false);
+	doMessageDelete(false);
+	doUserLogin(false);
+	doUserRegister(false);
+	doUserDelete(false);
+}
 
 
 
