@@ -1,0 +1,89 @@
+#! /usr/bin/ruby
+
+require 'rubygems'
+require '../functions/connect.rb'
+require 'xml'
+require 'rack'
+require 'digest/sha1'
+
+$dbh=dbconnect
+
+XML::Error.set_handler(&XML::Error::QUIET_HANDLER)
+
+class UserGetAvatar
+
+    def call(env)
+        
+        req= Rack::Request.new(env);
+	
+        #kill the server from outside
+		c=req.query_string()
+		if(c=="die")
+            puts "FAAAAAAAAAAAATHER"
+    		abort
+		end
+
+		#Errorhandling
+        #read the xml file    
+		begin
+			doc = XML::Document.string(req.body.read);			
+		rescue Exception => e
+			xml = "<error no='1'>XML ERROR while calling  user/getavatar: #{e.message}</error>"
+			return [501,{"Content-Type" => "text/xml"},[xml]] 
+		end
+		#done reading xml file
+
+		#read the rng file
+		begin
+			relaxng_doc = XML::Document.file('../../interface/user/getavatar/request.rng')
+			relaxng_sch = XML::RelaxNG.document(relaxng_doc)
+			#validate relax ng    
+				begin 
+					doc.validate_relaxng(relaxng_sch)
+				rescue Exception => e
+					xml = "<error no='7'>XML ERROR: #{e.message}</error>"
+					return [501,{"Content-Type" => "text/xml"},[xml]]                
+				end
+            #done validating
+		rescue
+			xml = "<error no='5'>Couldn't open relaxng file. Check permissions or path</error>"
+			return [501,{"Content-Type" => "text/xml"},[xml]]
+		end
+        #done reading rng file
+      
+        #check if user is logged in
+        sql_getuser = "select username from geologgedin where logginschlussel =?;"
+            
+        st_getuser=$dbh.prepare(sql_getuser)
+        st_getuser.execute(key)
+        username = "" 
+        
+        if $dbh.affected_rows > 0
+        #user ist eingelogt
+           while row = st_getuser.fetch do
+                username = row[0]
+                break
+            end
+               
+                st_update = $dbh.prepare("UPDATE geousers SET password=? where username=?")
+                password = Digest::SHA1.hexdigest(doc.find("/gts/password").first.content)
+                st_update.execute(password,username)
+                 
+                xmlresponse = "<gts query='user/changepassword'>"
+                xmlresponse = xmlresponse+"<success />"
+                xmlresponse = xmlresponse+"</gts>"
+               return [200,{"Content-Type" => "text/xml"},[xmlresponse]]           
+                       
+        else
+        #user ist nicht eingelogt -> error   
+          xml = "<error no='666'>U r not loged in</error>"
+          return [501,{"Content-Type" => "text/xml"},[xml]]
+          
+        end
+        #user login check ende
+       
+    end #end call
+
+end #end UserGetAvatar
+
+Rack::Handler::FastCGI.run UserGetAvatar.new
