@@ -1,0 +1,15 @@
+<grammar xmlns= 'http://relaxng.org/ns/structure/1.0' datatypeLibrary='http://www.w3.org/2001/XMLSchema-datatypes'>
+	<start>
+		<element name='gts'>
+			<zeroOrMore>
+				<element name='username'>
+					<data type='string'>
+						<param name='maxLength'>
+							50	
+						</param>
+					</data>
+				</element>
+			</zeroOrMore>				
+		</element>
+	</start>
+</grammar>
