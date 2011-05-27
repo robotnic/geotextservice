@@ -75,7 +75,11 @@ def getResponse(relaxDocument, requestUrl, erroranzahl, correctanzahl, key=0, id
 		end
 		
 		puts x
-		puts xml , "<br/>"
+
+                # fuer request output
+		xml2 = xml.gsub("<", "&lt;")
+		xml2 = xml2.gsub(">", "&gt;")
+		puts xml2 , "<br/>"
 
 		begin
 			response = Net::HTTP.start(url.host, url.port) {|http| http.request(request)}
@@ -106,7 +110,7 @@ def getResponse(relaxDocument, requestUrl, erroranzahl, correctanzahl, key=0, id
 		  puts "<br/><div class='ok'>RNG: ok</div>"
 		end
 
-		# für response
+		# fï¿½r response
 		response = response.gsub("<", "&lt;")
 		response = response.gsub(">", "&gt;")
 	
