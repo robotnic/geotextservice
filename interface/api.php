@@ -76,7 +76,4 @@ function attrib($el){
 	}
 }
 
-
-
-
 ?>

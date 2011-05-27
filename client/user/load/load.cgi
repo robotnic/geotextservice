@@ -47,8 +47,5 @@ else
   puts "<br/><b>RNG:</b> ok"
 end
 
-
-
-
 %>
 

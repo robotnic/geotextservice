@@ -3,23 +3,21 @@
 		<choice>
 			<element name='gts'>
 				<attribute name='query'>
-					<data type='string' >
-                    </data>
+					<data type='string' />
 				</attribute>
-				<element name='success'>
-				</element>				
+				<element name='success'><empty /></element>				
 			</element>
 			<element name='error'>
 				<attribute name='no'>
-					<data type='integer'>
-                    </data>
+					<data type='integer' />
 				</attribute>
 				<data type='string'>
 					<param name='maxLength'>
-						127
+						511
 					</param>
 				</data>
 			</element>
 		</choice>
 	</start>
 </grammar>
+
