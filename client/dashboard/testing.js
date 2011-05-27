@@ -192,7 +192,30 @@ function doUserChangepassword(clear)
 
 
     for(i=0;i<xmllist.length;i++) {
-        doAjax(xmllist[i],i);
+        setTimeout(doAjax(xmllist[i],i),500);
+    }
+}
+
+
+function doSetavatar(clear)
+{
+    if(clear) clearResults();
+
+    // alle xmls für user/delete registrieren
+    xmllist = new Array();
+    for (i=1;i<8;i++) {
+        var xml = "user/setavatar/setavatar.cgi?type=error&id="+i;
+        xmllist.push(xml);
+    }
+    for (i=1;i<2;i++) {
+        var xml = "user/setavatar/setavatar.cgi?type=correct&id="+i;
+        xmllist.push(xml);
+    }
+
+
+    for(i=0;i<xmllist.length;i++) {
+        setTimeout(doAjax(xmllist[i],i),500);
+
     }
 }
 

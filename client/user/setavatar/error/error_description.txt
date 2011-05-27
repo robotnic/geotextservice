@@ -1,0 +1,8 @@
+01 keine URL angegeben
+02 URL mit Sonderzeichen
+03 Schließen des URL-Tags fehlt
+04 Ganzer URL-Tag fehlt
+05 Schließen des gts-Tags fehlt
+06 kein key angegeben
+07 kein gts-Tag
+ 
