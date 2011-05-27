@@ -4,24 +4,15 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Übersichtssite</title>
 <link rel="stylesheet" type="text/css" href="style.css"  />
-<script language="javascript" type="text/javascript" src="http://code.jquery.com/jquery-1.6.1.min.js" />
+<script  type="text/javascript" src="http://code.jquery.com/jquery-1.6.1.min.js" ></script>
 
+<script type="text/javascript">
 
+$("document").ready(function(){
 
-<script language="JavaScript">
-
-
-//funktion um das bild zu wechseln, wenn man mit der maus drüberfährt
-
-$("document").ready(function()
-{
-	
-
-	$("a").click(function(evt)
-	{
-	evt.preventDefault();
-	alert("clicked");
-		$(this + " > img").src = "button_cancel.png";
+	$("a").click(function(evt)	{
+		evt.preventDefault();
+		$("img",this).attr("src","button_cancel.png");
 	});
 
 });
