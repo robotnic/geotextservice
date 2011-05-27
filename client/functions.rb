@@ -183,6 +183,7 @@ def getResponse(relaxDocument, requestUrl, erroranzahl, correctanzahl, key=0, id
 					rescue
 						puts "Fehler im Response (XML)"
 					end
+
 					# validate returns row error message and exits.
 					begin
 						instance.validate_relaxng(relaxng_schema)
@@ -193,7 +194,7 @@ def getResponse(relaxDocument, requestUrl, erroranzahl, correctanzahl, key=0, id
 					else
 						puts "<div class='ok'><b>RNG:</b> ok</div>"
 					end
-
+					
 					# fuer response
 					response = response.gsub("<", "&lt;")
 					response = response.gsub(">", "&gt;")
@@ -202,7 +203,7 @@ def getResponse(relaxDocument, requestUrl, erroranzahl, correctanzahl, key=0, id
 					if(response != "")
 						puts "response " , response
 					end
-				
+
 				puts "<br/>"
 				puts "<br/>"
 			end

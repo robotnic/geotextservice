@@ -11,7 +11,7 @@ require "xml"
 
 cgi = CGI.new
 
-query =
+query = "bbox=10,10,20,20";
 
 
 url = URI.parse('http://vs099.virtual.fhstp.ac.at/~dm101507/geotextservice/API/message/load?', query)

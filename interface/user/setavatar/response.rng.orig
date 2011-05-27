@@ -5,7 +5,12 @@
 				<attribute name='query'>
 					<data type='string' />
 				</attribute>
+<<<<<<< HEAD
+				<element name='success'>
+				</element>
+=======
 				<element name='success'><empty /></element>				
+>>>>>>> 71eb7dee9d755fde6390b53c081564dad1ca0764
 			</element>
 			<element name='error'>
 				<attribute name='no'>

@@ -22,7 +22,8 @@ responseLogin = responseLogin.body
 #puts responseLogin
 xml = XML::Document.string(responseLogin)
 key=xml.find("/gts/success/@key").first.value
+puts key
 
-getResponse('../../../interface/user/setavatar/response.rng', 'http://vs099.virtual.fhstp.ac.at/~dm101527/geotextservice/API/user/setavatar', 9, 1, key)
+getResponse('../../../interface/user/setavatar/response.rng', 'http://vs099.virtual.fhstp.ac.at/~dm101507/geotextservice/API/user/setavatar', 7, 1, key)
 
 %>
