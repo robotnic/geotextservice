@@ -72,14 +72,15 @@ class UserDelete
             if $dbh.affected_rows > 0
                 #user is admin
                
-                st_delete=$dbh.prepare("DELETE from geousers where username=? and admin=0")
-
+                st_delete=$dbh.prepare("DELETE from geousers where username=? and admin=0;")
+                st_deletelogin = $dbh.prepare("DELETE FROM geologgedin WHERE username=?")
                 xmlresponse = "<gts query='user/delete'>"
             
                     doc.find("/gts/delete").each {|node|
                         deleteme=node.attributes.get_attribute("user").value                    
                         
                         st_delete.execute(deleteme)
+                        st_deletelogin.execute(deleteme)
                         xmlresponse = xmlresponse+"<delete user='#{deleteme}' />"
                     }
                 xmlresponse = xmlresponse+"</gts>"
