@@ -175,6 +175,30 @@ function doUserDelete(clear)
     }
 }
 
+function doUserChangepassword(clear)
+{
+    if(clear) clearResults();
+
+    // alle xmls für user/delete registrieren
+    xmllist = new Array();
+    for (i=1;i<8;i++) {
+        var xml = "user/changepassword/changepwd.cgi?type=error&id="+i;
+        xmllist.push(xml);
+    }
+    for (i=1;i<2;i++) {
+        var xml = "user/changepassword/changepwd.cgi?type=correct&id="+i;
+        xmllist.push(xml);
+    }
+
+
+    for(i=0;i<xmllist.length;i++) {
+        doAjax(xmllist[i],i);
+    }
+}
+
+
+
+
 //Alle Tests starten
 function doAll() {
     clearResults();
@@ -187,13 +211,11 @@ function doAll() {
 
 
 
-
+var count = 0;
 function doAjax(script,id) {
     //erstellen des requests
     var req = null;
 
-	
-	
     try{
         req = new XMLHttpRequest();
     }
@@ -226,22 +248,16 @@ function doAjax(script,id) {
                 }else{
                     //schreibe die antwort in den div container mit der class result
 
-                    /*			  var newRes = document.createElement("div");
-					$(newRes).addClass("response");
-					$("#results").append($(newRes));
-					$(".result").html(req.responseText);
-*/					
+                    count++;
+
                     var newRes = document.createElement("div");
                     $(newRes).addClass("response");
-                    $(newRes).attr("id", id);
+                    $(newRes).attr("id", count);
                     $("#results").append($(newRes));
           
                     var responseText = req.responseText;
-          
-                    // responseText2 = responseText.replace("statt","HHHHHHH");
-                    // responseText2 = htmlEncode(responseText);
                     
-                    $("#"+id).html(responseText);
+                    $("#"+count).html(responseText);
           
                     if($(".response .error").length > 0) $("#status").removeClass("good").addClass("bad");
                     else if($(".response .ok").length > 0) $("#status").removeClass("bad").addClass("good");
