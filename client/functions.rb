@@ -107,8 +107,8 @@ def getResponse(relaxDocument, requestUrl, erroranzahl, correctanzahl, key=0, id
 		end
 
 		# für response
-		#response = response.gsub("<", "&lt;")
-		#response = response.gsub(">", "&gt;")
+		response = response.gsub("<", "&lt;")
+		response = response.gsub(">", "&gt;")
 	
 		if(response != "")
 			puts "response " , response
