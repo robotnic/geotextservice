@@ -74,8 +74,12 @@ def getResponse(relaxDocument, requestUrl, erroranzahl, correctanzahl, key=0, id
 			#puts "Fehler: id2 ersetzen"
 		end
 		
-		puts x
-		puts xml , "<br/>"
+		puts x , ":<br/>"
+
+                # fuer request output
+		xml2 = xml.gsub("<", "&lt;")
+		xml2 = xml2.gsub(">", "&gt;")
+		puts "<pre>", xml2 , "</pre>"
 
 		begin
 			response = Net::HTTP.start(url.host, url.port) {|http| http.request(request)}
@@ -106,12 +110,12 @@ def getResponse(relaxDocument, requestUrl, erroranzahl, correctanzahl, key=0, id
 		  puts "<br/><div class='ok'>RNG: ok</div>"
 		end
 
-		# für response
-		#response = response.gsub("<", "&lt;")
-		#response = response.gsub(">", "&gt;")
+		# fï¿½r response
+		response = response.gsub("<", "&lt;")
+		response = response.gsub(">", "&gt;")
 	
 		if(response != "")
-			puts "response " , response
+			puts "<br/>Response: <pre>" , response , "</pre>"
 		end
 	else
 		# alle Dateien aus Directory
