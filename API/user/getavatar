@@ -4,7 +4,6 @@ require 'rubygems'
 require '../functions/connect.rb'
 require 'xml'
 require 'rack'
-require 'digest/sha1'
 
 $dbh=dbconnect
 
@@ -51,36 +50,19 @@ class UserGetAvatar
 		end
         #done reading rng file
       
-        #check if user is logged in
-        sql_getuser = "select username from geologgedin where logginschlussel =?;"
-            
-        st_getuser=$dbh.prepare(sql_getuser)
-        st_getuser.execute(key)
-        username = "" 
-        
-        if $dbh.affected_rows > 0
-        #user ist eingelogt
-           while row = st_getuser.fetch do
-                username = row[0]
-                break
-            end
-               
-                st_update = $dbh.prepare("UPDATE geousers SET password=? where username=?")
-                password = Digest::SHA1.hexdigest(doc.find("/gts/password").first.content)
-                st_update.execute(password,username)
+        username = doc.find("/gts/username").first.content
+
+        st_getavatar = $dbh.prepare("SELECT username,avatar FROM geousers WHERE username=?")
+        st_getavatar.execute(username)
                  
-                xmlresponse = "<gts query='user/changepassword'>"
-                xmlresponse = xmlresponse+"<success />"
-                xmlresponse = xmlresponse+"</gts>"
-               return [200,{"Content-Type" => "text/xml"},[xmlresponse]]           
-                       
-        else
-        #user ist nicht eingelogt -> error   
-          xml = "<error no='666'>U r not loged in</error>"
-          return [501,{"Content-Type" => "text/xml"},[xml]]
-          
+        xmlresponse = "<gts query='user/getavatar'>"
+        
+        while row = st_getavatar.fetch do
+            xmlresponse = xmlresponse+"<url username=' #{row[0]}'>#{row[1]}</url>"
         end
-        #user login check ende
+
+        xmlresponse = xmlresponse+"</gts>"
+        return [200,{"Content-Type" => "text/xml"},[xmlresponse]]           
        
     end #end call
 
