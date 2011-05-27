@@ -20,9 +20,12 @@ responseLogin = Net::HTTP.start(urlLogin.host, urlLogin.port){|http| http.reques
 
 responseLogin = responseLogin.body
 #puts responseLogin
-xml = XML::Document.string(responseLogin)
-key=xml.find("/gts/success/@key").first.value
-puts key
+
+
+	xml = XML::Document.string(responseLogin)
+	key=xml.find("/gts/success/@key").first.value
+	
+	puts key
 
 getResponse('../../../interface/user/setavatar/response.rng', 'http://vs099.virtual.fhstp.ac.at/~dm101527/geotextservice/API/user/setavatar', 6, 1, key)
 
