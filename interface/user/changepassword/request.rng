@@ -13,6 +13,9 @@
                     <param name='maxLength'>
                     127
                      </param>
+                     <param name='minLength'>
+                     6
+                     </param>
                 </data>
             </element>
         </element>

@@ -7,7 +7,7 @@
                     </data>
 				</attribute>
 				<element name='success'>
-				</element>				
+				</element>
 			</element>
 			<element name='error'>
 				<attribute name='no'>
