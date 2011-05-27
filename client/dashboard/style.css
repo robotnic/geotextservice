@@ -22,6 +22,11 @@ h2 {
 	background-color: #555;
 	display: block;
 }
+pre {
+    background-color: #777;
+    margin: 2px 4px;
+    padding: 2px;
+}
 
 
 
