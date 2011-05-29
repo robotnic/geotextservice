@@ -10,29 +10,18 @@ $dbh=dbconnect
 class MessageLoad
 	def call(env)
 		req = Rack::Request.new(env)
-		$stdout.flush
 		c=req.query_string()
-    	if(c=="die")
+    	
+        if(c=="die")
             puts "FAAAAAATHER"
 		    abort
-            return
+            exit
 		end #End if
+        #replace the hex encoded characters from the uri
+        #keine rack funktion dafür gefunden... alle ruby unescape funktionen failen...
+        c.gsub!("%2c", ",")
 
-=begin
-        d=URI.unescape(req.url())
-
-		if(!c)
-			c="";
-		end
-
-	        xmlresponse = "<gts>"
-        xmlresponse.concat("<content>this is a test")
-        xmlresponse.concat(d)
-        xmlresponse.concat("</content>")
-        xmlresponse.concat("</gts>")
-        return  [200, {"Content-Type" => "text/xml"}, [xmlresponse]]
-
-		cc=c.split("=")[1]
+        cc=c.split("=")[1]
 		#cc="-180,-90,180,90";
 		bboxarray = cc.split(",")
 		s=bboxarray[0]
@@ -70,8 +59,8 @@ class MessageLoad
 			return[500,{"Content-Type" => "text/xml"},[xml]]
 			
 		end
-=end
-    end #end call
-end #end MessageLoad
+
+    end #end def
+end #end MEssageLoad
 
 Rack::Handler::FastCGI.run MessageLoad.new
