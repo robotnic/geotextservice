@@ -174,7 +174,6 @@ function doUserDelete(clear)
         xmllist.push(xml);
     }
   
-  
     for(i=0;i<xmllist.length;i++) {
         doAjax(xmllist[i],i);
     }
@@ -195,12 +194,24 @@ function doUserChangepassword(clear)
         xmllist.push(xml);
     }
 
-
-    for(i=0;i<xmllist.length;i++) {
-        setTimeout(doAjax(xmllist[i],i),500);
-    }
+	timeout(xmllist);
+	
+   /* for(i=0;i<xmllist.length;i++) {
+    	
+        setTimeout("doAjax(xmllist[i],i)",500);
+    }*/
 }
 
+var timeCount = 0;
+
+function timeout(xmllist){
+	doAjax(xmllist[timeCount],timeCount);
+	timeCount++;
+	
+	if(timeCount < xmllist.length){
+        setTimeout("timeout(xmllist)",700);
+    }
+}
 
 function doSetavatar(clear)
 {
@@ -208,7 +219,7 @@ function doSetavatar(clear)
 
     // alle xmls für user/delete registrieren
     xmllist = new Array();
-    for (i=1;i<8;i++) {
+    for (i=1;i<7;i++) {
         var xml = "user/setavatar/setavatar.cgi?type=error&id="+i;
         xmllist.push(xml);
     }
@@ -219,11 +230,32 @@ function doSetavatar(clear)
 
 
     for(i=0;i<xmllist.length;i++) {
-        setTimeout(doAjax(xmllist[i],i),500);
+        doAjax(xmllist[i],i);
 
     }
 }
 
+function doGetavatar(clear){
+	if(clear) clearResults();
+
+    // alle xmls für user/delete registrieren
+    xmllist = new Array();
+    for (i=1;i<8;i++) {
+        var xml = "user/getavatar/getavatar.cgi?type=error&id="+i;
+        xmllist.push(xml);
+    }
+    for (i=1;i<2;i++) {
+        var xml = "user/getavatar/getavatar.cgi?type=correct&id="+i;
+        xmllist.push(xml);
+    }
+
+
+    for(i=0;i<xmllist.length;i++) {
+        doAjax(xmllist[i],i);
+
+    }
+
+}
 
 
 
@@ -231,10 +263,14 @@ function doSetavatar(clear)
 function doAll() {
     clearResults();
     doMessageSave(false);
+    doMessageLoad(false);
     doMessageDelete(false);
     doUserLogin(false);
     doUserRegister(false);
     doUserDelete(false);
+    doUserChangepassword(false);
+    doGetavatar(false);
+    doSetavatar(false);
 }
 
 

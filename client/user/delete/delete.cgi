@@ -83,7 +83,7 @@ rescue
 end
 
 
-getResponse('../../../interface/user/delete/response.rng', 'http://vs099.virtual.fhstp.ac.at/~dm101507/geotextservice/API/user/delete', 9, 1, key)
+getResponse('../../../interface/user/delete/response.rng', 'http://vs099.virtual.fhstp.ac.at/~dm101507/geotextservice/API/user/delete', 7, 2, key)
 
 #require "uri"
 #require "net/http"

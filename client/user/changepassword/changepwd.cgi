@@ -60,7 +60,7 @@ end
 
 
 user = "changepwd"
-pw = "1234"
+pw = "123456"
 
 #User anlegen
 registerUser= "<gts><username>"+user+"</username><password>"+pw+"</password></gts>"
