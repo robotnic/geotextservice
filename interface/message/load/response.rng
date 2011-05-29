@@ -5,30 +5,33 @@
 				<attribute name="query">
 					<data type='string'/>
 				</attribute>
+				<attribute name="poly">
+					<data type='string'/>
+				</attribute>
 				<zeroOrMore>
 					<element name="content">
-						<attribute name="lat">
+					 	<attribute name="lat">
 							<data type='double'/>
 						</attribute>
 						<attribute name="lon">
 							<data type='double'/>
 						</attribute>
-						<attribute name="id">
-							<data type='integer'/>
-						</attribute>
 						<attribute name="user">
-							<data type='string'>
+							<data type='string' >
 								<param name='maxLength'>
 								50
 								</param>
 							</data>
 						</attribute>
+						<attribute name="id">
+							<data type='integer'/>
+						</attribute>
 						<attribute name="timestamp">
-							<data type='dateTime'/>
+							<data type='string' />
 						</attribute>
 						<data type='string'>
 							<param name='maxLength'>
-								127
+								1000
 							</param>
 						</data>
 					</element>

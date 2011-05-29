@@ -1,6 +1,6 @@
 
 
-var path = "http://vs099.virtual.fhstp.ac.at/~dm101551/projekt/geotextservice/client/";
+var path = "http://vs099.virtual.fhstp.ac.at/~dm101504/geotextservice/client/";
 
 $(document).ready(function() {
     var startTime = new Date().getMilliseconds();
@@ -72,9 +72,14 @@ function doMessageSave(clear)
 function doMessageLoad(clear)
 {
     if(clear) clearResults();
+    
+    
   
     // alle xmls für message/load registrieren
     xmllist = new Array();
+    var xml = "message/load/load.cgi";
+    xmllist.push(xml);
+    /*
     for (i=1;i<16;i++) {
         var xml = "message/load/load.cgi?type=error&id="+i;
         xmllist.push(xml);
@@ -82,7 +87,7 @@ function doMessageLoad(clear)
     for (i=1;i<4;i++) {
         var xml = "message/load/load.cgi?type=correct&id="+i;
         xmllist.push(xml);
-    }
+    }*/
   
   
     for(i=0;i<xmllist.length;i++) {

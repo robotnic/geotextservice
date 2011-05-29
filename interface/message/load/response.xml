@@ -1,4 +1,4 @@
-<gts query="message/load[bbox=12,43,23,12]">
+<gts poly="0 0,10 0,10 10,0 10,0 0" query="message/load[bbox=12,43,23,12]">
 <content  lat="48.2" lon="15.6" user="franzi" id="234"  timestamp="2010-10-03T20:35:37">Hier kommt das grosse Blabla</content>
 <content  lat="49.3" lon="-13.6" user="elfriede" id="134"  timestamp="2010-10-07T22:15:27">Elfriede is at home.</content>
 </gts>

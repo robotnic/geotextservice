@@ -110,7 +110,7 @@ def getResponse(relaxDocument, requestUrl, erroranzahl, correctanzahl, key=0, id
 		  puts "<br/><div class='ok'>RNG: ok</div>"
 		end
 
-		# f�r response
+		# fuer response
 		response = response.gsub("<", "&lt;")
 		response = response.gsub(">", "&gt;")
 	
